@@ -1,0 +1,5 @@
+.pytest_cache
+
+./src/pytest_cache
+
+./tests/pytest_cache

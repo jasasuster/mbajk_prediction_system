@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "mbajk-prediction-system"
+version = "0.1.0"
+description = ""
+authors = ["jasasuster <92645266+jasasuster@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{ include = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+flask = "^3.0.2"
+requests = "^2.31.0"
+pandas = "^2.2.1"
+numpy = "^1.26.4"
+matplotlib = "^3.8.3"
+sklearn-preprocessing = "^0.1.0"
+scikit-learn = "^1.4.1.post1"
+tensorflow-io-gcs-filesystem = "0.27.0"
+tensorflow = "~2.10"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+flask-testing = "^0.8.1"
+ipykernel = "^6.29.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
