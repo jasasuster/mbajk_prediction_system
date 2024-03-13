@@ -1,5 +1,5 @@
 import pytest
-from flask import Flask
+import json
 from flask_testing import TestCase
 
 from src.serve.api import app
@@ -10,12 +10,14 @@ class TestAPI(TestCase):
     return app
   
   def test_predict(self):
-    data = {'input': [1, 2, 3, 4]}
+    with open('./tests/test_input.json', 'r') as file:
+      data = json.load(file)
+
     response = self.client.post('/mbajk/predict', json=data)
 
     assert response.status_code == 200
 
-    assert response.json == {'prediction': 12}
+    assert isinstance(response.json['prediction'], float)
 
 if __name__ == '__main__':
   pytest.main()
