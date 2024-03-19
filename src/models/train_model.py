@@ -72,7 +72,9 @@ def calculate_and_save_metrics(y_test, gru_predictions_inv, model_history):
 
   test_metrics.to_csv('../reports/test_metrics.txt', sep='\t', index=False)
 
-def train(model, df):
+def train():
+  df = pd.read_csv('../mbajk_dataset.csv')
+
   df['date'] = pd.to_datetime(df['date'])
   df = df.sort_values(by='date')
 
