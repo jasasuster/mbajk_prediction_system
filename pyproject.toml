@@ -28,4 +28,5 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-train = "python train_model.py"
+serve = "src.serve.api:main"
+train = "src.models.train_model:train"

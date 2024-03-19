@@ -12,6 +12,7 @@ scaler = StandardScaler()
 
 def create_uni_array(df):
   df_uni = df['available_bike_stands']
+  print('df len', len(df_uni))
   uni_array = df_uni.values.reshape(-1, 1)
 
   return uni_array
@@ -20,12 +21,15 @@ def split_and_scale(uni_array):
   train_size = len(uni_array) - 1488
   train, test = uni_array[0:train_size], uni_array[train_size:]
 
+  print('train len', len(train))
+  print('test len', len(test))
+
   train_scaled = scaler.fit_transform(train)
   test_scaled = scaler.transform(test)
 
   return train_scaled, test_scaled
 
-def create_dataset(dataset, window_size=186):
+def create_dataset(dataset, window_size=45):
   X, y = [], []
   for i in range(len(dataset) - window_size):
       window = dataset[i:i+window_size, 0]
@@ -40,8 +44,14 @@ def reshape_for_model(train_scaled, test_scaled):
   X_train, y_train = create_dataset(train_scaled, window_size)
   X_test, y_test = create_dataset(test_scaled, window_size)
 
+  print('Oblika učnih podatkov: X_train: ', X_train.shape, ', y_train:', y_train.shape)
+  print('Oblika testnih podatkov: X_test: ', X_test.shape, ', y_test:', y_test.shape)
+
   X_train = X_train.reshape(X_train.shape[0], 1, X_train.shape[1])
   X_test = X_test.reshape(X_test.shape[0], 1, X_test.shape[1])
+
+  print('Preoblikovani X_train:', X_train.shape)
+  print('Preoblikovani X_test:', X_test.shape)
 
   return X_train, y_train, X_test, y_test
 
@@ -55,6 +65,8 @@ def build_gru_model(input_shape):
   return model
 
 def calculate_and_save_metrics(y_test, gru_predictions_inv, model_history):
+  print('Calculating and saving metrics...')
+
   y_test_inv = scaler.inverse_transform(y_test.reshape(-1, 1)).flatten()
 
   gru_mae = mean_absolute_error(y_test_inv, gru_predictions_inv)
@@ -62,7 +74,7 @@ def calculate_and_save_metrics(y_test, gru_predictions_inv, model_history):
   gru_evs = explained_variance_score(y_test_inv, gru_predictions_inv)
 
   model_history_df = pd.DataFrame(model_history.history)
-  model_history_df.to_csv('../reports/train_metrics.txt', sep='\t', index=False)
+  model_history_df.to_csv('./reports/train_metrics.txt', sep='\t', index=False)
 
   test_metrics = pd.DataFrame({
     'mae': [gru_mae],
@@ -70,10 +82,10 @@ def calculate_and_save_metrics(y_test, gru_predictions_inv, model_history):
     'evs': [gru_evs]
   })
 
-  test_metrics.to_csv('../reports/test_metrics.txt', sep='\t', index=False)
+  test_metrics.to_csv('./reports/test_metrics.txt', sep='\t', index=False)
 
 def train():
-  df = pd.read_csv('../mbajk_dataset.csv')
+  df = pd.read_csv('./mbajk_dataset.csv')
 
   df['date'] = pd.to_datetime(df['date'])
   df = df.sort_values(by='date')
@@ -81,6 +93,7 @@ def train():
   df.set_index('date', inplace=True)
   df_hourly = df.resample('H').mean()
   df_hourly.reset_index(inplace=True)
+  df_hourly = df_hourly.dropna()
 
   uni_array = create_uni_array(df_hourly)
 
@@ -91,6 +104,7 @@ def train():
   input_shape = (X_train.shape[1], X_train.shape[2])
 
   model = build_gru_model(input_shape)
+  print('Training model...')
   model_history = model.fit(X_train, y_train, epochs=15, validation_split=0.2)
 
   predictions = model.predict(X_test)
@@ -100,5 +114,5 @@ def train():
 
   timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
-  model.save(f'../models/uni_gru_model_{timestamp}.h5')
-  joblib.dump(scaler, f'../models/uni_gru_scaler{timestamp}.pkl')
+  model.save(f'./models/uni_gru_model_{timestamp}.h5')
+  joblib.dump(scaler, f'./models/uni_gru_scaler{timestamp}.pkl')

@@ -1,67 +1,28 @@
-from tensorflow.keras.models import load_model
 from flask import Flask, request
 
-import pandas as pd
-import numpy as np
-import joblib
+from src.models.predict_model import predict
 
-loaded_model = load_model('./models/uni_gru_model.h5')
-loaded_scaler = joblib.load('./models/uni_gru_scaler.pkl')
+def create_app():
+    app = Flask(__name__)
 
-def check_missing_features(data, expected_features):
-  for feature in expected_features:
-    if feature not in data:
-      return {'error': f'Missing feature: {feature}'}, 400
-  return None
+    @app.route('/mbajk/predict', methods=['POST'])
+    def predict_val():
+        try:
+            data = request.get_json()
+            prediction = predict(data)
 
-def preprocess_data(data):
-  if len(data) != 45:
-    return {'error': 'Invalid data length'}, 400
-  
-  expected_features = ['date', 'available_bike_stands']
+            return {'prediction': prediction}, 200
+        except Exception as e:
+            return {'error': str(e)}, 400
 
-  for obj in data:
-    missing_feature_error = check_missing_features(obj, expected_features)
-    if missing_feature_error:
-      return missing_feature_error
-    
-  df = pd.DataFrame(data)
-  df['date'] = pd.to_datetime(df['date'])
-  df = df.sort_values(by='date')
+    return app
 
-  df_uni = df['available_bike_stands']
-  uni_array = df_uni.values.reshape(-1, 1)
-  uni_array = loaded_scaler.transform(uni_array)
+def main():
+    app = create_app()
+    app.run(host='0.0.0.0', port=3000)
 
-  uni_array = uni_array.reshape(uni_array.shape[1], 1, uni_array.shape[0])
-
-  return uni_array
-
-def make_predictions(uni_array):
-  print('making predictions')
-  prediction = loaded_model.predict(uni_array)
-  prediction = loaded_scaler.inverse_transform(prediction)
-  print('prediction', prediction)
-  return {'prediction': prediction.tolist()[0][0]}
-
-# API
-app = Flask(__name__)
-
-@app.route('/mbajk/predict', methods=['POST'])
-def predict():
-  try:
-    data = request.get_json()
-
-    uni_array = preprocess_data(data)
-
-    result = make_predictions(uni_array)
-
-    return result, 200
-  except Exception as e:
-    return {'error': str(e)}, 400
-  
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=3000)
+    main()
 
 # [
 #   '{{repeat(45)}}',
