@@ -2,10 +2,11 @@ import pytest
 import json
 from flask_testing import TestCase
 
-from src.serve.api import app
+from src.serve.api import create_app
 
 class TestAPI(TestCase):
   def create_app(self):
+    app = create_app()
     app.config['TESTING'] = True
     return app
   
