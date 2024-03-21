@@ -30,3 +30,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 serve = "src.serve.api:main"
 train = "src.models.train_model:train"
+fetch = "src.data.fetch_data:main"
