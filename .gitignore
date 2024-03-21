@@ -1,5 +1,10 @@
 .pytest_cache
 
-./src/pytest_cache
+src/__pycache__
 
-./tests/pytest_cache
+tests/__pycache__
+
+src/client/node_modules
+src/client/.vscode
+
+src/client/node_modules/.package-lock.json
