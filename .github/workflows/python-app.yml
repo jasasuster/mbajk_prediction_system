@@ -8,6 +8,8 @@ on:
     branches: ['main', 'vaja2']
   pull_request:
     branches: ['main', 'vaja2']
+  schedule:
+    - cron: '0 1 * * *'
 
 permissions:
   contents: read
@@ -73,10 +75,6 @@ jobs:
 
   fetch:
     runs-on: ubuntu-latest
-
-    on:
-      schedule:
-        - cron: '0 1 * * *'
 
     steps:
       - name: Checkout repository
