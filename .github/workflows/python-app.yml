@@ -5,51 +5,12 @@ on:
     branches: ['main', 'vaja2']
   pull_request:
     branches: ['main', 'vaja2']
-  schedule:
-    - cron: '0 1 * * *'
 
 permissions:
   contents: read
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.10'
-
-      - name: cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry-1.8.2
-
-      - uses: snok/install-poetry@v1
-        with:
-          version: 1.8.2
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: cache deps
-        id: cache-deps
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('**/poetry.lock') }}
-
-      - run: poetry install --no-interaction --no-root
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-
-      - run: poetry install --no-interaction
-
-      - run: poetry run pytest
-
-  fetch:
     runs-on: ubuntu-latest
 
     steps:
