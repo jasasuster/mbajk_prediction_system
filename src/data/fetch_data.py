@@ -2,7 +2,9 @@ import requests
 import csv
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+
 import pandas as pd
 
 def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variables):
@@ -72,7 +74,7 @@ def save_weather_data_to_csv(data, timestamp, dict):
 def main():
   forecast_days = 1
   hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
-  timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+  timestamp = datetime.now(ZoneInfo("Europe/Ljubljana")).strftime('%Y%m%d_%H%M%S')
 
   bike_station_data = fetch_bike_station_data("maribor", "5e150537116dbc1786ce5bec6975a8603286526b")
   latitudes, longitudes = extract_coordinates(bike_station_data)
