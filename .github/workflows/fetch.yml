@@ -19,7 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: vaja2
+          ref: 'vaja2'
 
       - uses: actions/setup-python@v2
         with:
