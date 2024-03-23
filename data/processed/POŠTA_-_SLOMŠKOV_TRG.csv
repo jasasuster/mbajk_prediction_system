@@ -1,0 +1,2 @@
+number,contract_name,name,address,position,banking,bonus,bike_stands,available_bike_stands,available_bikes,status,last_update,temperature,relative_humidity,dew_point,apparent_temperature,precipitation_probability,rain,surface_pressure
+6,maribor,POŠTA - SLOMŠKOV TRG,Slomškov trg 10,"{'lat': 46.558924, 'lng': 15.644443}",False,False,20,18,2,OPEN,1711222811000,6.1,78,2.6,3.0,100,3.3,979.0

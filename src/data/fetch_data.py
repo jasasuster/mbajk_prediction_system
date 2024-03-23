@@ -1,11 +1,13 @@
 import requests
-import csv
 import os
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+from src.data.process_data import process_data
 
-import pandas as pd
+def hour_rounder(t):
+  # Rounds to nearest hour by adding a timedelta hour if minute >= 30
+  return (t.replace(second=0, microsecond=0, minute=0, hour=t.hour)+timedelta(hours=t.minute//30)).strftime('%Y-%m-%dT%H:%M')
 
 def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variables):
   weather_url = "https://api.open-meteo.com/v1/forecast"
@@ -16,7 +18,20 @@ def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variable
     "forecast_days": forecast_days
   }
   response = requests.get(weather_url, params=params)
-  return response.json()
+  data = response.json()
+
+  rounded_time = hour_rounder(datetime.now(ZoneInfo("Europe/Ljubljana")))
+  closest_weather_data_list = []
+
+  for forecast_object in data:
+    if forecast_object:
+      forecast_times = forecast_object['hourly']['time']
+      weather_data = forecast_object['hourly']
+      closest_weather_data = {key: value[forecast_times.index(rounded_time)] for key, value in weather_data.items() if key != 'time'}
+      renamed_weather_data = {k.replace('_2m', ''): v for k, v in closest_weather_data.items()}
+      closest_weather_data_list.append(renamed_weather_data)
+
+  return closest_weather_data_list
 
 def extract_coordinates(station_data):
     latitudes = [station['position']['lat'] for station in station_data]
@@ -38,39 +53,6 @@ def save_data_to_json(data, timestamp, dict):
     json.dump(data, file, ensure_ascii=False, indent=4)
   return raw_output_file_path
 
-def save_bike_data_to_csv(data, timestamp, dict):
-  script_dir = os.path.dirname(os.path.realpath(__file__))
-  data_output_dir = os.path.join(script_dir, '..', '..', 'data', 'processed', dict)
-  os.makedirs(data_output_dir, exist_ok=True)
-  for station in data:
-    station_name = station['name']
-    filename = f"{station_name.replace(' ', '_')}.csv"
-    filepath = os.path.join(data_output_dir, filename)
-    file_exists = os.path.isfile(filepath)
-    mode = 'a' if file_exists else 'w'
-    with open(filepath, mode, newline='', encoding='utf-8') as file:
-      writer = csv.writer(file)
-      if not file_exists:
-        header = station.keys()
-        writer.writerow(header)
-      writer.writerow(station.values())
-
-def save_weather_data_to_csv(data, timestamp, dict):
-  script_dir = os.path.dirname(os.path.realpath(__file__))
-  data_output_dir = os.path.join(script_dir, '..', '..', 'data', 'processed', dict)
-  os.makedirs(data_output_dir, exist_ok=True)
-  filename = f"weather_{timestamp}.csv"
-  filepath = os.path.join(data_output_dir, filename)
-  file_exists = os.path.isfile(filepath)
-  mode = 'a' if file_exists else 'w'
-  with open(filepath, mode, newline='', encoding='utf-8') as file:
-    writer = csv.writer(file)
-    if not file_exists:
-      header = data[0].keys()
-      writer.writerow(header)
-    for entry in data:
-      writer.writerow(entry.values())
-
 def main():
   forecast_days = 1
   hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
@@ -79,11 +61,11 @@ def main():
   bike_station_data = fetch_bike_station_data("maribor", "5e150537116dbc1786ce5bec6975a8603286526b")
   latitudes, longitudes = extract_coordinates(bike_station_data)
   save_data_to_json(bike_station_data, timestamp, 'mbajk')
-  save_bike_data_to_csv(bike_station_data, timestamp, 'mbajk')
 
   weather_data = fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variables)
   save_data_to_json(weather_data, timestamp, 'weather')
-  save_weather_data_to_csv(weather_data, timestamp, 'weather')
+
+  process_data(bike_station_data, weather_data)
 
 if __name__ == "__main__":
   main()
