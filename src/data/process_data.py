@@ -6,7 +6,6 @@ def process_data(bike_data, weather_data):
     {**bike_station, **weather_forecast}
     for bike_station, weather_forecast in zip(bike_data, weather_data)
   ]
-  print(merged_data)
   script_dir = os.path.dirname(os.path.realpath(__file__))
   data_output_dir = os.path.join(script_dir, '..', '..', 'data', 'processed')
   os.makedirs(data_output_dir, exist_ok=True)

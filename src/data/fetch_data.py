@@ -23,9 +23,12 @@ def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variable
   rounded_time = hour_rounder(datetime.now(ZoneInfo("Europe/Ljubljana")))
   closest_weather_data_list = []
 
+  forecast_times = data[0]['hourly']['time']
+  if rounded_time not in forecast_times:
+    rounded_time = forecast_times[0]
+
   for forecast_object in data:
     if forecast_object:
-      forecast_times = forecast_object['hourly']['time']
       weather_data = forecast_object['hourly']
       closest_weather_data = {key: value[forecast_times.index(rounded_time)] for key, value in weather_data.items() if key != 'time'}
       renamed_weather_data = {k.replace('_2m', ''): v for k, v in closest_weather_data.items()}
