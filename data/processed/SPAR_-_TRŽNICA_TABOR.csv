@@ -6,3 +6,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 25,maribor,SPAR - TRŽNICA TABOR,Kardeljeva c. 55,"{'lat': 46.542655, 'lng': 15.634329}",False,False,20,19,1,OPEN,1711246774000,3.8,89,2.1,1.6,90,0.0,976.8
 25,maribor,SPAR - TRŽNICA TABOR,Kardeljeva c. 55,"{'lat': 46.542655, 'lng': 15.634329}",False,False,20,19,1,OPEN,1711250147000,4.7,78,1.2,1.7,77,0.0,976.8
 25,maribor,SPAR - TRŽNICA TABOR,Kardeljeva c. 55,"{'lat': 46.542655, 'lng': 15.634329}",False,False,20,19,1,OPEN,1711253780000,4.8,75,0.7,1.4,65,0.0,975.9
+25,maribor,SPAR - TRŽNICA TABOR,Kardeljeva c. 55,"{'lat': 46.542655, 'lng': 15.634329}",False,False,20,19,1,OPEN,1711256805000,4.7,76,0.8,1.6,52,0.0,976.8
