@@ -40,3 +40,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 7,maribor,PARTIZANSKA C. - TIC,Partizanska cesta 6a,"{'lat': 46.560227, 'lng': 15.650781}",False,False,20,13,7,OPEN,1711372620000,13.6,29,-4.1,9.6,0,0.0,974.5
 7,maribor,PARTIZANSKA C. - TIC,Partizanska cesta 6a,"{'lat': 46.560227, 'lng': 15.650781}",False,False,20,6,14,OPEN,1711376027000,13.4,35,-1.8,9.9,0,0.0,974.2
 7,maribor,PARTIZANSKA C. - TIC,Partizanska cesta 6a,"{'lat': 46.560227, 'lng': 15.650781}",False,False,20,12,8,OPEN,1711379732000,12.6,39,-1.0,9.2,0,0.0,974.0
+7,maribor,PARTIZANSKA C. - TIC,Partizanska cesta 6a,"{'lat': 46.560227, 'lng': 15.650781}",False,False,20,16,4,OPEN,1711383571000,10.6,51,0.8,7.9,0,0.0,974.0
