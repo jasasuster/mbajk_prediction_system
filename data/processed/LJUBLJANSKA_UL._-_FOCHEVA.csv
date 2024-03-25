@@ -34,3 +34,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 23,maribor,LJUBLJANSKA UL. - FOCHEVA,LJUBLJANSKA 41,"{'lat': 46.545947, 'lng': 15.644015}",False,False,20,18,2,OPEN,1711350926000,9.4,44,-2.2,6.0,0,0.0,976.8
 23,maribor,LJUBLJANSKA UL. - FOCHEVA,LJUBLJANSKA 41,"{'lat': 46.545947, 'lng': 15.644015}",False,False,20,16,4,OPEN,1711354687000,11.1,42,-1.4,6.4,0,0.0,976.5
 23,maribor,LJUBLJANSKA UL. - FOCHEVA,LJUBLJANSKA 41,"{'lat': 46.545947, 'lng': 15.644015}",False,False,20,18,2,OPEN,1711357717000,12.1,33,-3.7,8.4,0,0.0,976.5
+23,maribor,LJUBLJANSKA UL. - FOCHEVA,LJUBLJANSKA 41,"{'lat': 46.545947, 'lng': 15.644015}",False,False,20,18,2,OPEN,1711361352000,12.7,30,-4.5,9.7,0,0.0,976.1
