@@ -49,3 +49,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 5,maribor,MLADINSKA UL. - TRUBARJEVA UL.,Mladinska ulica 15,"{'lat': 46.56294, 'lng': 15.644185}",False,False,16,13,3,OPEN,1711404851000,5.0,65,-1.0,2.1,0,0.0,973.7
 5,maribor,MLADINSKA UL. - TRUBARJEVA UL.,Mladinska ulica 15,"{'lat': 46.56294, 'lng': 15.644185}",False,False,16,13,3,OPEN,1711408385000,2.2,90,0.7,-0.3,68,0.0,974.7
 5,maribor,MLADINSKA UL. - TRUBARJEVA UL.,Mladinska ulica 15,"{'lat': 46.56294, 'lng': 15.644185}",False,False,16,10,6,OPEN,1711415046000,4.4,56,-3.6,1.6,0,0.0,973.1
+5,maribor,MLADINSKA UL. - TRUBARJEVA UL.,Mladinska ulica 15,"{'lat': 46.56294, 'lng': 15.644185}",False,False,16,9,7,OPEN,1711419653000,2.8,67,-2.7,-0.0,0,0.0,972.3
