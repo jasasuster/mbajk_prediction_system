@@ -73,3 +73,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 17,maribor,NA POLJANAH - HEROJA ŠERCERJA,NA POLJANAH 53,"{'lat': 46.553109, 'lng': 15.624098}",False,False,20,18,2,OPEN,1711494843000,3.6,72,-0.9,0.8,0,0.0,973.8
 17,maribor,NA POLJANAH - HEROJA ŠERCERJA,NA POLJANAH 53,"{'lat': 46.553109, 'lng': 15.624098}",False,False,20,19,1,OPEN,1711501503000,8.0,67,2.2,5.5,0,0.0,965.5
 17,maribor,NA POLJANAH - HEROJA ŠERCERJA,NA POLJANAH 53,"{'lat': 46.553109, 'lng': 15.624098}",False,False,20,19,1,OPEN,1711505741000,8.6,68,3.0,6.2,0,0.0,965.1
+17,maribor,NA POLJANAH - HEROJA ŠERCERJA,NA POLJANAH 53,"{'lat': 46.553109, 'lng': 15.624098}",False,False,20,20,0,OPEN,1711509055000,8.5,63,1.9,6.1,0,0.0,964.6
