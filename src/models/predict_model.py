@@ -2,9 +2,11 @@ from tensorflow.keras.models import load_model
 
 import joblib
 import pandas as pd
+import numpy as np
 
-loaded_model = load_model('./models/uni_gru_model.h5')
-loaded_scaler = joblib.load('./models/uni_gru_scaler.pkl')
+loaded_model = load_model('./models/multi_gru_model.h5')
+loaded_bk_scaler = joblib.load('./models/multi_gru_bk_scaler.pkl')
+loaded_fo_scaler = joblib.load('./models/multi_gru_fo_scaler.pkl')
 
 def check_missing_features(data, expected_features):
   for feature in expected_features:
@@ -12,11 +14,25 @@ def check_missing_features(data, expected_features):
       return {'error': f'Missing feature: {feature}'}, 400
   return None
 
-def preprocess_data(data):
-  if len(data) != 45:
-    return {'error': 'Invalid data length'}, 400
+def create_multi_array(df):
+  df_multi = df[['available_bike_stands', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure']]
+
+  multi_array = df_multi.values
   
-  expected_features = ['date', 'available_bike_stands']
+  bike_stands = multi_array[:, -1]
+  bike_stands_normalized = loaded_bk_scaler.transform(bike_stands.reshape(-1, 1))
+
+  other_features = multi_array[:, :-1]
+  other_features_normalized = loaded_fo_scaler.transform(other_features)
+
+  multi_array_scaled = np.column.stack([bike_stands_normalized, other_features_normalized])
+
+  multi_array_scaled = multi_array_scaled.reshape(1, multi_array_scaled.shape[1], multi_array_scaled.shape[0])
+
+  return multi_array_scaled
+
+def preprocess_data(data):  
+  expected_features = ['available_bike_stands', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure']
 
   for obj in data:
     missing_feature_error = check_missing_features(obj, expected_features)
@@ -27,18 +43,18 @@ def preprocess_data(data):
   df['date'] = pd.to_datetime(df['date'])
   df = df.sort_values(by='date')
 
-  df_uni = df['available_bike_stands']
-  uni_array = df_uni.values.reshape(-1, 1)
-  uni_array = loaded_scaler.transform(uni_array)
+  df_multi = df['available_bike_stands']
+  multi_array = create_multi_array(df_multi)
 
-  uni_array = uni_array.reshape(uni_array.shape[1], 1, uni_array.shape[0])
-
-  return uni_array
+  return multi_array
 
 def predict(data):
-  uni_array = preprocess_data(data)
+  if len(data) != 45:
+    return {'error': 'Invalid data length'}, 400
 
-  prediction = loaded_model.predict(uni_array)
-  prediction = loaded_scaler.inverse_transform(prediction)
+  multi_array = preprocess_data(data)
+
+  prediction = loaded_model.predict(multi_array)
+  prediction = loaded_bk_scaler.inverse_transform(prediction)
 
   return prediction.tolist()[0][0]
