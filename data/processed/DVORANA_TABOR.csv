@@ -102,3 +102,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 22,maribor,DVORANA TABOR,Gorkega ulica 48,"{'lat': 46.549005, 'lng': 15.635014}",False,False,20,9,11,OPEN,1711606353000,10.9,56,2.5,5.5,1,0.0,964.1
 22,maribor,DVORANA TABOR,Gorkega ulica 48,"{'lat': 46.549005, 'lng': 15.635014}",False,False,20,13,7,OPEN,1711609995000,12.7,49,2.3,7.7,0,0.0,964.9
 22,maribor,DVORANA TABOR,Gorkega ulica 48,"{'lat': 46.549005, 'lng': 15.635014}",False,False,20,15,5,OPEN,1711613629000,14.1,44,2.0,8.7,0,0.0,965.7
+22,maribor,DVORANA TABOR,Gorkega ulica 48,"{'lat': 46.549005, 'lng': 15.635014}",False,False,20,16,4,OPEN,1711617263000,15.3,41,2.1,10.8,0,0.0,966.5
