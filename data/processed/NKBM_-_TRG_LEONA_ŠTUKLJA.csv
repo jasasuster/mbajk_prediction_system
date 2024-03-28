@@ -94,3 +94,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 9,maribor,NKBM - TRG LEONA ŠTUKLJA,Ulica slovenske osamosvojitve 5,"{'lat': 46.558519, 'lng': 15.649072}",False,False,20,15,5,OPEN,1711574065000,11.8,71,6.7,9.7,100,0.0,959.5
 9,maribor,NKBM - TRG LEONA ŠTUKLJA,Ulica slovenske osamosvojitve 5,"{'lat': 46.558519, 'lng': 15.649072}",False,False,20,15,5,OPEN,1711577837000,11.2,70,6.0,9.1,100,0.0,960.5
 9,maribor,NKBM - TRG LEONA ŠTUKLJA,Ulica slovenske osamosvojitve 5,"{'lat': 46.558519, 'lng': 15.649072}",False,False,20,15,5,OPEN,1711580861000,9.8,57,1.7,7.5,0,0.0,967.1
+9,maribor,NKBM - TRG LEONA ŠTUKLJA,Ulica slovenske osamosvojitve 5,"{'lat': 46.558519, 'lng': 15.649072}",False,False,20,15,5,OPEN,1711588122000,11.0,48,0.4,6.1,4,0.0,961.4
