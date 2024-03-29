@@ -1,12 +1,11 @@
 from tensorflow.keras.models import load_model
 
 import joblib
+import ast
 import pandas as pd
 import numpy as np
 
-loaded_model = load_model('./models/multi_gru_model.h5')
-loaded_bk_scaler = joblib.load('./models/multi_gru_bk_scaler.pkl')
-loaded_fo_scaler = joblib.load('./models/multi_gru_fo_scaler.pkl')
+from src.data.fetch_weather_data import fetch_weather_forecast
 
 def check_missing_features(data, expected_features):
   for feature in expected_features:
@@ -14,7 +13,7 @@ def check_missing_features(data, expected_features):
       return {'error': f'Missing feature: {feature}'}, 400
   return None
 
-def create_multi_array(df):
+def create_multi_array(df, loaded_bk_scaler, loaded_fo_scaler):
   df_multi = df[['available_bike_stands', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure']]
 
   multi_array = df_multi.values
@@ -31,7 +30,7 @@ def create_multi_array(df):
 
   return multi_array_scaled
 
-def preprocess_data(data):  
+def preprocess_data(data, bk_scaler, fo_scaler):  
   expected_features = ['available_bike_stands', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure']
 
   for obj in data:
@@ -44,17 +43,46 @@ def preprocess_data(data):
   df = df.sort_values(by='date')
 
   df_multi = df['available_bike_stands']
-  multi_array = create_multi_array(df_multi)
+  multi_array = create_multi_array(df_multi, bk_scaler, fo_scaler)
 
   return multi_array
 
-def predict(data):
-  if len(data) != 45:
-    return {'error': 'Invalid data length'}, 400
+def predict(station_name):
+  df = pd.read_csv(f'./data/processed/{station_name}.csv')
 
-  multi_array = preprocess_data(data)
+  position = df['position'][0]
+  position = ast.literal_eval(position)
+  latitude = position['lat']
+  longitude = position['lng']
+  hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
+  data = df.tail(20)  # get last 20 for prediction
 
-  prediction = loaded_model.predict(multi_array)
-  prediction = loaded_bk_scaler.inverse_transform(prediction)
+  weather_data = fetch_weather_forecast(latitude, longitude, 1, hourly_variables)
+  weather_data = pd.DataFrame(weather_data)
+  weather_data = weather_data.head(7) # get first 7 hours for prediction
 
-  return prediction.tolist()[0][0]
+  print('weather_data:', weather_data)
+  
+  model_dir = f'./models/{station_name}'  
+  loaded_model = load_model(f'{model_dir}/multi_gru_model.h5')
+  loaded_bk_scaler = joblib.load(f'{model_dir}/multi_gru_bk_scaler.pkl')
+  loaded_fo_scaler = joblib.load(f'{model_dir}/multi_gru_fo_scaler.pkl')
+
+  predictions = []
+  for i in range(7):
+    print(i,':')
+    multi_array = preprocess_data(data, loaded_bk_scaler, loaded_fo_scaler)
+    prediction = loaded_model.predict(multi_array)
+    prediction = loaded_bk_scaler.inverse_transform(prediction)
+    predictions.append(prediction.tolist()[0][0])
+
+    print('\tprediction:', prediction)
+
+    forecast_data = weather_data.iloc[i]
+    forecast_data['available_bike_stands'] = prediction
+
+    data = data.append(forecast_data, ignore_index=True)
+
+    data = data.iloc[1:]
+
+  return predictions
