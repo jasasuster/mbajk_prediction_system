@@ -39,7 +39,7 @@ def fill_missing_values(df):
   return df
 
 def create_multi_array(df):
-  df_multi = df[['available_bike_stands', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure']]
+  df_multi = df[['available_bike_stands', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure', 'relative_humidity']]
   multi_array = df_multi.values
   return multi_array
 
