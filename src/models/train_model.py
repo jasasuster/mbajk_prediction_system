@@ -171,7 +171,7 @@ def main():
     df = pd.read_csv(file)
 
     station_number = df['number'].unique()[0]
-    station_name = df['name'].unique()[0]
+    station_name = df['name'].unique()[0].replace(' ', '_')
     model_save_dir = f'./models/{station_name}/'
     reports_save_dir = f'./reports/{station_name}/'
     os.makedirs(model_save_dir, exist_ok=True)

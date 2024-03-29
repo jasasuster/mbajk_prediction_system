@@ -4,8 +4,10 @@ import joblib
 import ast
 import pandas as pd
 import numpy as np
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
-from src.data.fetch_weather_data import fetch_weather_forecast
+from src.data.fetch_weather_data import fetch_weather_forecast, hour_rounder
 
 def check_missing_features(data, expected_features):
   for feature in expected_features:
@@ -57,13 +59,29 @@ def predict(station_name):
   hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
   data = df.tail(20)  # get last 20 for prediction
 
-  weather_data = fetch_weather_forecast(latitude, longitude, 1, hourly_variables)
+  weather_data = fetch_weather_forecast(latitude, longitude, 3, hourly_variables)
   weather_data = pd.DataFrame(weather_data)
+
+  rounded_time = hour_rounder(datetime.now(ZoneInfo("Europe/Ljubljana")))
+
+  index = weather_data['hourly']['time'].index(rounded_time)
+
+  # new_df = pd.DataFrame(columns=['temperature_2m', 'relative_humidity_2m', 'dew_point_2m', 'apparent_temperature', 'precipitation_probability', 'rain', 'surface_pressure'])
+  new_df = pd.DataFrame()
+  for i, row in weather_data.iterrows():
+    hourly = row['hourly'][index + 1:index + 8]
+    # new_df.loc[row.name] = hourly
+    new_df[row.name] = hourly
+
+  # row_names = {'temperature_2m':'temperature', 'relative_humidity_2m':'relative_humidity', 'dew_point_2m':'dew_point'}
+  # new_df = new_df.rename(index=row_names)
+  
+  print('new_df:', new_df)
+  print('new_df.t:', new_df.transpose())
+
   weather_data = weather_data.head(7) # get first 7 hours for prediction
 
-  print('weather_data:', weather_data)
-  
-  model_dir = f'./models/{station_name}'  
+  model_dir = f'./models/{station_name}'
   loaded_model = load_model(f'{model_dir}/multi_gru_model.h5')
   loaded_bk_scaler = joblib.load(f'{model_dir}/multi_gru_bk_scaler.pkl')
   loaded_fo_scaler = joblib.load(f'{model_dir}/multi_gru_fo_scaler.pkl')
@@ -78,8 +96,10 @@ def predict(station_name):
 
     print('\tprediction:', prediction)
 
-    forecast_data = weather_data.iloc[i]
+    forecast_data = new_df.iloc[i]
     forecast_data['available_bike_stands'] = prediction
+
+    print('\tforecast_data:', forecast_data)
 
     data = data.append(forecast_data, ignore_index=True)
 
