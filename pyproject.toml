@@ -29,5 +29,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 serve = "src.serve.api:main"
-train = "src.models.train_model:train"
+train = "src.models.train_model:main"
 fetch = "src.data.fetch_data:main"
