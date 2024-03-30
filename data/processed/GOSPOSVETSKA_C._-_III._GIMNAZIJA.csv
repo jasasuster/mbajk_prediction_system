@@ -147,3 +147,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 3,maribor,GOSPOSVETSKA C. - III. GIMNAZIJA,Gosposvetska cesta 4,"{'lat': 46.560761, 'lng': 15.64053}",False,False,20,16,4,OPEN,1711775514000,10.6,81,7.5,9.4,0,0.0,977.6
 3,maribor,GOSPOSVETSKA C. - III. GIMNAZIJA,Gosposvetska cesta 4,"{'lat': 46.560761, 'lng': 15.64053}",False,False,20,15,5,OPEN,1711779144000,12.6,73,7.9,11.5,0,0.0,977.7
 3,maribor,GOSPOSVETSKA C. - III. GIMNAZIJA,Gosposvetska cesta 4,"{'lat': 46.560761, 'lng': 15.64053}",False,False,20,15,5,OPEN,1711782773000,14.9,67,8.8,14.1,0,0.0,977.9
+3,maribor,GOSPOSVETSKA C. - III. GIMNAZIJA,Gosposvetska cesta 4,"{'lat': 46.560761, 'lng': 15.64053}",False,False,20,19,1,OPEN,1711786407000,18.4,58,10.0,18.2,0,0.0,977.5
