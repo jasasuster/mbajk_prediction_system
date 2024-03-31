@@ -180,3 +180,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 6,maribor,POŠTA - SLOMŠKOV TRG,Slomškov trg 10,"{'lat': 46.558924, 'lng': 15.644443}",False,False,20,17,3,OPEN,1711901903000,16.5,62,9.1,13.9,0,0.0,974.1
 6,maribor,POŠTA - SLOMŠKOV TRG,Slomškov trg 10,"{'lat': 46.558924, 'lng': 15.644443}",False,False,20,17,3,OPEN,1711904929000,15.8,63,8.8,14.7,0,0.0,974.7
 6,maribor,POŠTA - SLOMŠKOV TRG,Slomškov trg 10,"{'lat': 46.558924, 'lng': 15.644443}",False,False,20,20,0,OPEN,1711909174000,13.8,77,9.8,13.4,0,0.0,974.9
+6,maribor,POŠTA - SLOMŠKOV TRG,Slomškov trg 10,"{'lat': 46.558924, 'lng': 15.644443}",False,False,20,15,5,OPEN,1711912279000,14.8,72,9.8,13.5,0,0.0,974.9
