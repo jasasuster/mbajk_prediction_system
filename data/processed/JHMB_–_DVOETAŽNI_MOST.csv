@@ -176,3 +176,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 27,maribor,JHMB – DVOETAŽNI MOST,Cesta XIV. divizije,"{'lat': 46.554741, 'lng': 15.659814}",False,False,20,8,12,OPEN,1711888146000,18.7,46,6.9,14.9,19,0.0,976.0
 27,maribor,JHMB – DVOETAŽNI MOST,Cesta XIV. divizije,"{'lat': 46.554741, 'lng': 15.659814}",False,False,20,8,12,OPEN,1711890568000,18.7,46,6.9,14.9,19,0.0,976.0
 27,maribor,JHMB – DVOETAŽNI MOST,Cesta XIV. divizije,"{'lat': 46.554741, 'lng': 15.659814}",False,False,20,7,13,OPEN,1711894200000,18.4,58,10.0,16.2,0,0.0,976.6
+27,maribor,JHMB – DVOETAŽNI MOST,Cesta XIV. divizije,"{'lat': 46.554741, 'lng': 15.659814}",False,False,20,7,13,OPEN,1711897831000,17.5,58,9.1,14.3,0,0.0,976.4
