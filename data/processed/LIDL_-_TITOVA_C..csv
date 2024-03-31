@@ -165,3 +165,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 19,maribor,LIDL - TITOVA C.,Titova cesta 15,"{'lat': 46.551963, 'lng': 15.651564}",False,False,20,9,11,OPEN,1711847509000,12.1,64,5.5,9.2,0,0.0,973.8
 19,maribor,LIDL - TITOVA C.,Titova cesta 15,"{'lat': 46.551963, 'lng': 15.651564}",False,False,20,9,11,OPEN,1711851743000,11.9,66,5.8,8.7,0,0.0,973.8
 19,maribor,LIDL - TITOVA C.,Titova cesta 15,"{'lat': 46.551963, 'lng': 15.651564}",False,False,20,9,11,OPEN,1711854657000,12.3,65,5.9,9.4,0,0.0,973.6
+19,maribor,LIDL - TITOVA C.,Titova cesta 15,"{'lat': 46.551963, 'lng': 15.651564}",False,False,20,9,11,OPEN,1711858894000,12.3,68,6.6,10.4,0,0.0,974.0
