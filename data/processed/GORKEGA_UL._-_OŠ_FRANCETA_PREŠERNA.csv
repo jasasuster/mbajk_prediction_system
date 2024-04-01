@@ -207,3 +207,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 21,maribor,GORKEGA UL. - OŠ FRANCETA PREŠERNA,Gorkega ulica 32,"{'lat': 46.550683, 'lng': 15.639333}",False,False,20,15,4,OPEN,1712002297000,11.3,72,6.4,8.8,90,1.2,970.2
 21,maribor,GORKEGA UL. - OŠ FRANCETA PREŠERNA,Gorkega ulica 32,"{'lat': 46.550683, 'lng': 15.639333}",False,False,20,17,2,OPEN,1712005929000,11.3,68,5.6,9.6,90,0.6,971.6
 21,maribor,GORKEGA UL. - OŠ FRANCETA PREŠERNA,Gorkega ulica 32,"{'lat': 46.550683, 'lng': 15.639333}",False,False,20,17,2,OPEN,1712009558000,13.2,79,9.6,12.4,0,0.0,972.2
+21,maribor,GORKEGA UL. - OŠ FRANCETA PREŠERNA,Gorkega ulica 32,"{'lat': 46.550683, 'lng': 15.639333}",False,False,20,17,2,OPEN,1712013188000,13.2,79,9.6,12.4,0,0.0,972.2
