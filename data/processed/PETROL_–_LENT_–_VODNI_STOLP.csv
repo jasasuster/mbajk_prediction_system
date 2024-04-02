@@ -227,3 +227,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 29,maribor,PETROL – LENT – VODNI STOLP,Usnjarska ulica 5,"{'lat': 46.556534, 'lng': 15.647629}",False,False,20,11,9,OPEN,1712077687000,11.5,63,4.7,9.8,63,0.0,983.1
 29,maribor,PETROL – LENT – VODNI STOLP,Usnjarska ulica 5,"{'lat': 46.556534, 'lng': 15.647629}",False,False,20,10,10,OPEN,1712081943000,10.3,71,5.2,8.8,40,0.0,983.4
 29,maribor,PETROL – LENT – VODNI STOLP,Usnjarska ulica 5,"{'lat': 46.556534, 'lng': 15.647629}",False,False,20,12,8,OPEN,1712084956000,9.3,74,4.9,7.9,16,0.0,983.8
+29,maribor,PETROL – LENT – VODNI STOLP,Usnjarska ulica 5,"{'lat': 46.556534, 'lng': 15.647629}",False,False,20,8,12,OPEN,1712088588000,7.3,96,6.7,6.0,16,0.0,984.0
