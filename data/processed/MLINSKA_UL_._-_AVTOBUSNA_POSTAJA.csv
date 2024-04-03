@@ -237,3 +237,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 12,maribor,MLINSKA UL . - AVTOBUSNA POSTAJA,Mlinska ulica 24,"{'lat': 46.558534, 'lng': 15.654739}",False,False,20,9,11,OPEN,1712118072000,4.5,90,3.0,2.8,0,0.0,982.5
 12,maribor,MLINSKA UL . - AVTOBUSNA POSTAJA,Mlinska ulica 24,"{'lat': 46.558534, 'lng': 15.654739}",False,False,20,8,12,OPEN,1712121219000,7.0,83,4.3,5.4,0,0.0,982.3
 12,maribor,MLINSKA UL . - AVTOBUSNA POSTAJA,Mlinska ulica 24,"{'lat': 46.558534, 'lng': 15.654739}",False,False,20,10,10,OPEN,1712125039000,9.5,76,5.5,8.3,0,0.0,982.2
+12,maribor,MLINSKA UL . - AVTOBUSNA POSTAJA,Mlinska ulica 24,"{'lat': 46.558534, 'lng': 15.654739}",False,False,20,12,8,OPEN,1712128494000,12.4,72,7.5,11.0,0,0.0,982.2
