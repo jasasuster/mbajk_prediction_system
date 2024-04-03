@@ -240,3 +240,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 8,maribor,RAZLAGOVA UL. - OBČINA,Razlagova ulica 1,"{'lat': 46.56196, 'lng': 15.650235}",False,False,20,13,7,OPEN,1712128541000,12.3,72,7.4,11.0,0,0.0,981.1
 8,maribor,RAZLAGOVA UL. - OBČINA,Razlagova ulica 1,"{'lat': 46.56196, 'lng': 15.650235}",False,False,20,10,10,OPEN,1712132385000,14.7,68,8.8,13.5,0,0.0,980.6
 8,maribor,RAZLAGOVA UL. - OBČINA,Razlagova ulica 1,"{'lat': 46.56196, 'lng': 15.650235}",False,False,20,10,10,OPEN,1712135717000,16.5,56,7.7,14.1,0,0.0,979.7
+8,maribor,RAZLAGOVA UL. - OBČINA,Razlagova ulica 1,"{'lat': 46.56196, 'lng': 15.650235}",False,False,20,8,12,OPEN,1712139363000,16.6,46,5.0,13.4,0,0.0,979.8
