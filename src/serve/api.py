@@ -1,15 +1,18 @@
 from flask import Flask, request
+from flask_cors import CORS
 
 from src.models.predict_model import predict
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     @app.route('/mbajk/predict', methods=['POST'])
     def predict_val():
         try:
             data = request.get_json()
             station_name = data['station_name'].replace(' ', '_')
+            print(station_name)
             predictions = predict(station_name)
 
             return {'predictions': predictions}, 200

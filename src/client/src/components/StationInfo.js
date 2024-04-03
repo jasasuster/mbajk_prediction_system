@@ -1,0 +1,94 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+function StationInfo() {
+  const { stationId } = useParams();
+  const stationNumber = parseInt(stationId);
+  const [station, setStation] = useState(null);
+
+  const [predictions, setPredictions] = useState([]);
+  const [isLoadingPredictions, setIsLoadingPredictions] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.jcdecaux.com/vls/v1/stations?contract=maribor&apiKey=5e150537116dbc1786ce5bec6975a8603286526b', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        const foundStation = data.find((s) => s.number === stationNumber);
+        setStation(foundStation);
+      });
+  }, [stationNumber]);
+
+  useEffect(() => {
+    if (station) {
+      setIsLoadingPredictions(true);
+      fetch(`http://localhost:3000/mbajk/predict`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ station_name: station.name }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPredictions(data);
+          setIsLoadingPredictions(false);
+        })
+        .catch((err) => {
+          console.error('Error fetching predictions', err);
+          setError(err.message);
+          setIsLoadingPredictions(false);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [station]);
+
+  if (!station) return <div>Loading...</div>;
+
+  return (
+    <div className='bg-white max-w-xl mx-auto p-4 rounded-lg shadow-md'>
+      <h2 className='text-2xl font-bold mb-2'>{station.name}</h2>
+      <div className='flex items-center gap-2 font-medium mb-4'>
+        <span className='text-gray-600'>Status: </span>
+        <p className={`${station.status === 'OPEN' ? 'text-green-500' : 'text-red-500'}`}>{station.status === 'OPEN' ? 'Open Now' : 'Closed Now'}</p>
+      </div>
+      <div className='grid grid-cols-2 gap-4'>
+        <p className='text-gray-600'>Bike Stands:</p>
+        <p>{station.bike_stands}</p>
+        <p className='text-gray-600'>Available Bike Stands:</p>
+        <p>{station.available_bike_stands}</p>
+        <p className='text-gray-600'>Available Bikes:</p>
+        <p>{station.available_bikes}</p>
+      </div>
+      {isLoadingPredictions ? (
+        <div>Loading predictions...</div>
+      ) : (
+        <div className='mt-4'>
+          <h3 className='text-xl font-bold mb-2'>Predictions:</h3>
+          {error ? (
+            <div className='mt-4'>
+              <p className='text-red-500'>Error: {error}</p>
+            </div>
+          ) : (
+            <ul>
+              {predictions.map((prediction, index) => (
+                <li key={index} className='text-gray-600'>
+                  {prediction}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default StationInfo;
