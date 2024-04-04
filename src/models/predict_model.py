@@ -29,7 +29,6 @@ def create_multi_array(df, loaded_bk_scaler, loaded_fo_scaler):
   multi_array_scaled = np.column_stack([bike_stands_normalized, other_features_normalized])
 
   multi_array_scaled = multi_array_scaled.reshape(1, multi_array_scaled.shape[1], multi_array_scaled.shape[0])
-  print('multi_array_scaled:', multi_array_scaled.shape)
 
   return multi_array_scaled
 
@@ -78,11 +77,10 @@ def predict(station_name):
 
   predictions = []
   for i in range(7):
-    print('i:', i)
     multi_array = preprocess_data(data, loaded_bk_scaler, loaded_fo_scaler)
     prediction = loaded_model.predict(multi_array)
     prediction = loaded_bk_scaler.inverse_transform(prediction).tolist()[0][0]
-    predictions.append(prediction)
+    predictions.append(math.floor(prediction))
 
     forecast_data = weather_df.iloc[i]
     forecast_data['available_bike_stands'] = math.floor(prediction)

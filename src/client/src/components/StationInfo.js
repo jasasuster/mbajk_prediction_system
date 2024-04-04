@@ -28,27 +28,84 @@ function StationInfo() {
 
   useEffect(() => {
     if (station) {
-      setIsLoadingPredictions(true);
-      fetch(`http://localhost:3000/mbajk/predict`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ station_name: station.name }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPredictions(data);
-          setIsLoadingPredictions(false);
+      const storedPredictions = getPredictions(station.number);
+      if (storedPredictions) {
+        setPredictions(storedPredictions);
+        setIsLoadingPredictions(false);
+      } else {
+        setIsLoadingPredictions(true);
+        fetch(`http://localhost:3000/mbajk/predict`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ station_name: station.name }),
         })
-        .catch((err) => {
-          console.error('Error fetching predictions', err);
-          setError(err.message);
-          setIsLoadingPredictions(false);
-        });
+          .then((res) => res.json())
+          .then((data) => {
+            storePredictions(station.number, data.predictions);
+            setPredictions(data.predictions);
+            setIsLoadingPredictions(false);
+          })
+          .catch((err) => {
+            console.error('Error fetching predictions', err);
+            setError(err.message);
+            setIsLoadingPredictions(false);
+          });
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [station]);
+
+  function generateTimesArray(interval) {
+    const result = [];
+    const now = new Date();
+    // Round up to the next full hour
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0, 0);
+    const end = new Date(start);
+    end.setHours(start.getHours() + 7);
+
+    for (let d = start; d <= end; d.setMinutes(d.getMinutes() + interval)) {
+      result.push(format(d));
+    }
+
+    return result;
+  }
+
+  function format(inputDate) {
+    let hours = inputDate.getHours();
+    let minutes = inputDate.getMinutes();
+    const formattedHours = hours === 0 ? 12 : hours < 10 ? "0" + hours : hours;
+    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+    return formattedHours + ":" + formattedMinutes;
+  }
+
+  const times = generateTimesArray(60);
+
+  function storePredictions(stationNumber, predictions) {
+    const now = new Date();
+    const stationData = {
+      number: stationNumber,
+      predictions: predictions,
+      timestamp: now.getTime(),
+    };
+
+    const jsonString = JSON.stringify(stationData);
+
+    localStorage.setItem(`station-${stationNumber}`, jsonString);
+  }
+
+  function getPredictions(stationNumber) {
+    const storedData = localStorage.getItem(`station-${stationNumber}`);
+    if (storedData) {
+      const stationData = JSON.parse(storedData);
+      const now = new Date().getTime();
+      // Check if the stored data is less than 1 hour old
+      if (now - stationData.timestamp < 60 * 60 * 1000) {
+        return stationData.predictions; 
+      }
+    }
+    return null;
+  }
 
   if (!station) return <div>Loading...</div>;
 
@@ -80,7 +137,7 @@ function StationInfo() {
             <ul>
               {predictions.map((prediction, index) => (
                 <li key={index} className='text-gray-600'>
-                  {prediction}
+                  {times[index]}: {prediction < 0 ? 0 : prediction > station.bike_stands ? station.bike_stands : prediction}
                 </li>
               ))}
             </ul>
