@@ -21,7 +21,7 @@ class TestAPI(TestCase):
     assert isinstance(response.json['predictions'], list)
     assert len(response.json['predictions']) == 7
     for element in response.json['predictions']:
-      assert isinstance(element, float)
+      assert isinstance(element, int)
 
 if __name__ == '__main__':
   pytest.main()
