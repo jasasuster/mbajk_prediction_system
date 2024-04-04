@@ -264,3 +264,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 20,maribor,EUROPARK - POBREŠKA C.,Pobreška cesta 18,"{'lat': 46.554703, 'lng': 15.652826}",False,False,21,18,3,OPEN,1712222098000,19.1,48,7.8,17.6,0,0.0,986.2
 20,maribor,EUROPARK - POBREŠKA C.,Pobreška cesta 18,"{'lat': 46.554703, 'lng': 15.652826}",False,False,21,12,9,OPEN,1712225739000,20.0,41,6.4,17.6,0,0.0,985.9
 20,maribor,EUROPARK - POBREŠKA C.,Pobreška cesta 18,"{'lat': 46.554703, 'lng': 15.652826}",False,False,21,0,21,OPEN,1712233632000,20.1,44,7.5,17.2,0,0.0,984.3
+20,maribor,EUROPARK - POBREŠKA C.,Pobreška cesta 18,"{'lat': 46.554703, 'lng': 15.652826}",False,False,21,8,13,OPEN,1712236683000,20.1,44,7.5,17.2,0,0.0,984.3
