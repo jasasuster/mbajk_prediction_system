@@ -11,7 +11,7 @@ class TestAPI(TestCase):
   
   def test_predict(self):
     data = {
-      "station_name": "DVORANA TABOR"
+      "station_number": 5
     }
 
     response = self.client.post('/mbajk/predict', json=data)
