@@ -55,7 +55,7 @@ def predict(station_name):
   latitude = position['lat']
   longitude = position['lng']
   hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
-  data = df.tail(20)  # get last 20 for prediction
+  data = df.tail(30)  # get last 30 for prediction
 
   weather_data = fetch_weather_forecast(latitude, longitude, 3, hourly_variables)
   weather_data = pd.DataFrame(weather_data)

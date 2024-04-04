@@ -10,8 +10,9 @@ def process_data(bike_data, weather_data):
   data_output_dir = os.path.join(script_dir, '..', '..', 'data', 'processed')
   os.makedirs(data_output_dir, exist_ok=True)
   for station in merged_data:
-    station_name = station['name']
-    filename = f"{station_name.replace(' ', '_')}.csv"
+    # station_name = station['name']
+    station_number = station['number']
+    filename = f"{station_number}.csv"
     filepath = os.path.join(data_output_dir, filename)
     file_exists = os.path.isfile(filepath)
     mode = 'a' if file_exists else 'w'

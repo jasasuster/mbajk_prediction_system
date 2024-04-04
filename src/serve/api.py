@@ -11,9 +11,9 @@ def create_app():
     def predict_val():
         try:
             data = request.get_json()
-            station_name = data['station_name'].replace(' ', '_')
-            print(station_name)
-            predictions = predict(station_name)
+            station_number = data['station_number']
+            print(station_number)
+            predictions = predict(station_number)
 
             return {'predictions': predictions}, 200
         except Exception as e:

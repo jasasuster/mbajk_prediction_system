@@ -73,7 +73,7 @@ def split(multi_array):
 
   return train, test
 
-def create_dataset(dataset, window_size=20):
+def create_dataset(dataset, window_size=30):
   X, y = [], []
   for i in range(len(dataset) - window_size):
       window = dataset[i:i+window_size, :]
@@ -83,7 +83,7 @@ def create_dataset(dataset, window_size=20):
   return np.array(X), np.array(y)
 
 def reshape_for_model(train_scaled, test_scaled):
-  window_size = 20
+  window_size = 30
 
   X_train, y_train = create_dataset(train_scaled, window_size)
   X_test, y_test = create_dataset(test_scaled, window_size)
@@ -171,9 +171,8 @@ def main():
     df = pd.read_csv(file)
 
     station_number = df['number'].unique()[0]
-    station_name = df['name'].unique()[0].replace(' ', '_')
-    model_save_dir = f'./models/{station_name}/'
-    reports_save_dir = f'./reports/{station_name}/'
+    model_save_dir = f'./models/{station_number}/'
+    reports_save_dir = f'./reports/{station_number}/'
     os.makedirs(model_save_dir, exist_ok=True)
 
     print(f'Training model for station {station_number}...')

@@ -39,7 +39,7 @@ function StationInfo() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ station_name: station.name }),
+          body: JSON.stringify({ station_number: station.number }),
         })
           .then((res) => res.json())
           .then((data) => {
