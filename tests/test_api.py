@@ -18,9 +18,9 @@ class TestAPI(TestCase):
 
     assert response.status_code == 200
 
-    assert isinstance(response.json['prediction'], list)
-    assert len(response.json['prediction']) == 7
-    for element in response.json['prediction']:
+    assert isinstance(response.json['predictions'], list)
+    assert len(response.json['predictions']) == 7
+    for element in response.json['predictions']:
       assert isinstance(element, float)
 
 if __name__ == '__main__':
