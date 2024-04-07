@@ -329,3 +329,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 24,maribor,"VZAJEMNA, VARUH ZDRAVJA - BETNAVSKA C.",Betnavska c. 83,"{'lat': 46.54199, 'lng': 15.63831}",False,False,20,6,14,OPEN,1712466488000,14.0,79,10.4,13.7,0,0.0,986.1
 24,maribor,"VZAJEMNA, VARUH ZDRAVJA - BETNAVSKA C.",Betnavska c. 83,"{'lat': 46.54199, 'lng': 15.63831}",False,False,20,3,17,OPEN,1712470727000,17.3,59,9.2,16.8,0,0.0,986.8
 24,maribor,"VZAJEMNA, VARUH ZDRAVJA - BETNAVSKA C.",Betnavska c. 83,"{'lat': 46.54199, 'lng': 15.63831}",False,False,20,2,18,OPEN,1712473754000,20.3,50,9.6,19.8,0,0.0,987.4
+24,maribor,"VZAJEMNA, VARUH ZDRAVJA - BETNAVSKA C.",Betnavska c. 83,"{'lat': 46.54199, 'lng': 15.63831}",False,False,20,1,19,OPEN,1712477997000,22.8,49,11.6,22.6,0,0.0,987.3
