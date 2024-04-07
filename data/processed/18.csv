@@ -336,3 +336,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 18,maribor,LIDL - KOROŠKA C.,Koroška cesta 173,"{'lat': 46.565603, 'lng': 15.623133}",False,False,20,19,1,OPEN,1712492796000,26.6,48,14.7,26.2,0,0.0,986.7
 18,maribor,LIDL - KOROŠKA C.,Koroška cesta 173,"{'lat': 46.565603, 'lng': 15.623133}",False,False,20,14,6,OPEN,1712495824000,26.8,31,8.3,24.4,0,0.0,986.6
 18,maribor,LIDL - KOROŠKA C.,Koroška cesta 173,"{'lat': 46.565603, 'lng': 15.623133}",False,False,20,17,3,OPEN,1712498854000,25.5,38,10.1,23.6,0,0.0,986.4
+18,maribor,LIDL - KOROŠKA C.,Koroška cesta 173,"{'lat': 46.565603, 'lng': 15.623133}",False,False,20,15,5,OPEN,1712502642000,23.6,46,11.3,22.6,0,0.0,986.2
