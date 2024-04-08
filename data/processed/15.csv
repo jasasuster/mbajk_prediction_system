@@ -356,3 +356,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 15,maribor,LJUBLJANSKA UL. - II. GIMNAZIJA,Ljubljanska ul. 30-25,"{'lat': 46.548853, 'lng': 15.645591}",False,False,20,18,2,OPEN,1712567728000,25.9,43,12.3,24.5,0,0.0,984.1
 15,maribor,LJUBLJANSKA UL. - II. GIMNAZIJA,Ljubljanska ul. 30-25,"{'lat': 46.548853, 'lng': 15.645591}",False,False,20,14,6,OPEN,1712571471000,26.7,43,13.1,26.0,0,0.0,983.5
 15,maribor,LJUBLJANSKA UL. - II. GIMNAZIJA,Ljubljanska ul. 30-25,"{'lat': 46.548853, 'lng': 15.645591}",False,False,20,19,1,OPEN,1712574846000,27.4,39,12.2,26.2,0,0.0,983.1
+15,maribor,LJUBLJANSKA UL. - II. GIMNAZIJA,Ljubljanska ul. 30-25,"{'lat': 46.548853, 'lng': 15.645591}",False,False,20,20,0,OPEN,1712579257000,26.8,35,10.0,25.2,0,0.0,982.2
