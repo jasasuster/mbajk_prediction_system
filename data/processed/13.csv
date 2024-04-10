@@ -410,3 +410,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 13,maribor,PARTIZANSKA C. - ŽELEZNIŠKA POSTAJA,Partizanska cesta 46-48,"{'lat': 46.561555, 'lng': 15.65692}",False,False,20,18,2,OPEN,1712769270000,13.1,57,4.7,11.0,0,0.0,994.5
 13,maribor,PARTIZANSKA C. - ŽELEZNIŠKA POSTAJA,Partizanska cesta 46-48,"{'lat': 46.561555, 'lng': 15.65692}",False,False,20,16,4,OPEN,1712773288000,12.4,62,5.3,10.7,0,0.0,995.4
 13,maribor,PARTIZANSKA C. - ŽELEZNIŠKA POSTAJA,Partizanska cesta 46-48,"{'lat': 46.561555, 'lng': 15.65692}",False,False,20,14,6,OPEN,1712776316000,11.5,67,5.6,10.0,0,0.0,996.2
+13,maribor,PARTIZANSKA C. - ŽELEZNIŠKA POSTAJA,Partizanska cesta 46-48,"{'lat': 46.561555, 'lng': 15.65692}",False,False,20,14,6,OPEN,1712779948000,10.8,67,4.9,9.2,0,0.0,996.5
