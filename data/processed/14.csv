@@ -396,3 +396,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 14,maribor,ULICA MOŠE PIJADA - UKC,Ulica Moše Pijada 6,"{'lat': 46.552652, 'lng': 15.646023}",False,False,20,18,0,OPEN,1712718688000,13.7,75,9.4,13.4,0,0.0,985.0
 14,maribor,ULICA MOŠE PIJADA - UKC,Ulica Moše Pijada 6,"{'lat': 46.552652, 'lng': 15.646023}",False,False,20,17,1,OPEN,1712722399000,14.2,73,9.4,13.8,0,0.0,985.7
 14,maribor,ULICA MOŠE PIJADA - UKC,Ulica Moše Pijada 6,"{'lat': 46.552652, 'lng': 15.646023}",False,False,20,16,2,OPEN,1712725994000,14.5,68,8.7,13.5,0,0.0,986.0
+14,maribor,ULICA MOŠE PIJADA - UKC,Ulica Moše Pijada 6,"{'lat': 46.552652, 'lng': 15.646023}",False,False,20,12,6,OPEN,1712730168000,16.0,49,5.3,13.1,0,0.0,987.0
