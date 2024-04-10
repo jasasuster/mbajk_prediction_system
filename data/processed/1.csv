@@ -399,3 +399,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 1,maribor,GOSPOSVETSKA C. - TURNERJEVA UL.,Gosposvetska cesta 69,"{'lat': 46.562695, 'lng': 15.62935}",False,False,22,22,0,OPEN,1712729619000,16.0,50,5.6,13.2,0,0.0,987.1
 1,maribor,GOSPOSVETSKA C. - TURNERJEVA UL.,Gosposvetska cesta 69,"{'lat': 46.562695, 'lng': 15.62935}",False,False,22,13,9,OPEN,1712733393000,16.5,46,4.8,13.5,0,0.0,988.0
 1,maribor,GOSPOSVETSKA C. - TURNERJEVA UL.,Gosposvetska cesta 69,"{'lat': 46.562695, 'lng': 15.62935}",False,False,22,21,1,OPEN,1712737424000,17.1,44,4.8,14.1,0,0.0,988.8
+1,maribor,GOSPOSVETSKA C. - TURNERJEVA UL.,Gosposvetska cesta 69,"{'lat': 46.562695, 'lng': 15.62935}",False,False,22,22,0,OPEN,1712740545000,17.2,43,4.5,13.9,0,0.0,989.2
