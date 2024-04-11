@@ -423,3 +423,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 16,maribor,KOROŠKA C. - KOROŠKI VETER,Koroška cesta 74,"{'lat': 46.559319, 'lng': 15.63498}",False,False,20,14,6,OPEN,1712819377000,16.2,47,4.9,14.2,0,0.0,999.3
 16,maribor,KOROŠKA C. - KOROŠKI VETER,Koroška cesta 74,"{'lat': 46.559319, 'lng': 15.63498}",False,False,20,18,2,OPEN,1712823687000,16.9,44,4.6,14.9,0,0.0,999.4
 16,maribor,KOROŠKA C. - KOROŠKI VETER,Koroška cesta 74,"{'lat': 46.559319, 'lng': 15.63498}",False,False,20,17,3,OPEN,1712826941000,17.7,46,5.9,16.3,0,0.0,998.8
+16,maribor,KOROŠKA C. - KOROŠKI VETER,Koroška cesta 74,"{'lat': 46.559319, 'lng': 15.63498}",False,False,20,13,7,OPEN,1712830725000,18.4,49,7.5,17.5,0,0.0,998.6
