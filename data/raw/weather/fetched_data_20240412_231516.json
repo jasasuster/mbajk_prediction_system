@@ -1,0 +1,263 @@
+[
+    {
+        "temperature": 14.1,
+        "relative_humidity": 71,
+        "dew_point": 8.9,
+        "apparent_temperature": 13.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.2
+    },
+    {
+        "temperature": 13.0,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.9
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.3
+    },
+    {
+        "temperature": 13.3,
+        "relative_humidity": 79,
+        "dew_point": 9.7,
+        "apparent_temperature": 12.9,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 997.0
+    },
+    {
+        "temperature": 13.4,
+        "relative_humidity": 79,
+        "dew_point": 9.8,
+        "apparent_temperature": 13.0,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 998.3
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.7
+    },
+    {
+        "temperature": 12.4,
+        "relative_humidity": 80,
+        "dew_point": 9.0,
+        "apparent_temperature": 11.6,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.8
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.7
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.0
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.9
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.7
+    },
+    {
+        "temperature": 14.1,
+        "relative_humidity": 71,
+        "dew_point": 8.9,
+        "apparent_temperature": 13.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.7
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.9
+    },
+    {
+        "temperature": 13.3,
+        "relative_humidity": 79,
+        "dew_point": 9.7,
+        "apparent_temperature": 12.9,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.2
+    },
+    {
+        "temperature": 14.1,
+        "relative_humidity": 71,
+        "dew_point": 8.9,
+        "apparent_temperature": 13.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.8
+    },
+    {
+        "temperature": 12.4,
+        "relative_humidity": 80,
+        "dew_point": 9.0,
+        "apparent_temperature": 11.6,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.5
+    },
+    {
+        "temperature": 13.0,
+        "relative_humidity": 78,
+        "dew_point": 9.3,
+        "apparent_temperature": 12.4,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 997.9
+    },
+    {
+        "temperature": 13.2,
+        "relative_humidity": 79,
+        "dew_point": 9.7,
+        "apparent_temperature": 12.8,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.8
+    },
+    {
+        "temperature": 13.3,
+        "relative_humidity": 79,
+        "dew_point": 9.7,
+        "apparent_temperature": 12.9,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.3
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.1
+    },
+    {
+        "temperature": 12.9,
+        "relative_humidity": 78,
+        "dew_point": 9.2,
+        "apparent_temperature": 12.2,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.7
+    },
+    {
+        "temperature": 13.3,
+        "relative_humidity": 79,
+        "dew_point": 9.7,
+        "apparent_temperature": 12.9,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.9
+    },
+    {
+        "temperature": 13.0,
+        "relative_humidity": 78,
+        "dew_point": 9.3,
+        "apparent_temperature": 12.4,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 998.1
+    },
+    {
+        "temperature": 14.1,
+        "relative_humidity": 71,
+        "dew_point": 8.9,
+        "apparent_temperature": 13.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.8
+    },
+    {
+        "temperature": 14.0,
+        "relative_humidity": 71,
+        "dew_point": 8.8,
+        "apparent_temperature": 12.9,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.4
+    },
+    {
+        "temperature": 14.1,
+        "relative_humidity": 71,
+        "dew_point": 8.9,
+        "apparent_temperature": 13.3,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.0
+    },
+    {
+        "temperature": 13.4,
+        "relative_humidity": 79,
+        "dew_point": 9.9,
+        "apparent_temperature": 13.1,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 999.3
+    },
+    {
+        "temperature": 12.4,
+        "relative_humidity": 80,
+        "dew_point": 9.1,
+        "apparent_temperature": 11.6,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 995.9
+    },
+    {
+        "temperature": 13.3,
+        "relative_humidity": 79,
+        "dew_point": 9.7,
+        "apparent_temperature": 12.9,
+        "precipitation_probability": 0,
+        "rain": 0.0,
+        "surface_pressure": 996.3
+    }
+]
