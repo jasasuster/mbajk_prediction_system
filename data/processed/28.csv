@@ -479,3 +479,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 28,maribor,UM FGPA - LENT - SODNI STOLP,Pristan 6,"{'lat': 46.556731, 'lng': 15.64212}",False,False,20,4,16,OPEN,1713027950000,19.8,56,10.8,19.8,0,0.0,993.4
 28,maribor,UM FGPA - LENT - SODNI STOLP,Pristan 6,"{'lat': 46.556731, 'lng': 15.64212}",False,False,20,4,16,OPEN,1713032097000,16.6,71,11.3,16.6,0,0.0,993.3
 28,maribor,UM FGPA - LENT - SODNI STOLP,Pristan 6,"{'lat': 46.556731, 'lng': 15.64212}",False,False,20,7,13,OPEN,1713035135000,15.2,73,10.4,15.1,0,0.0,993.1
+28,maribor,UM FGPA - LENT - SODNI STOLP,Pristan 6,"{'lat': 46.556731, 'lng': 15.64212}",False,False,20,5,15,OPEN,1713038767000,15.8,61,8.3,15.1,0,0.0,993.3
