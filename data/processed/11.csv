@@ -460,3 +460,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 11,maribor,PARTIZANSKA C. - CANKARJEVA UL.,Partizanska c. 13,"{'lat': 46.56056, 'lng': 15.652935}",False,False,20,16,4,OPEN,1712956488000,13.3,79,9.7,12.9,0,0.0,996.3
 11,maribor,PARTIZANSKA C. - CANKARJEVA UL.,Partizanska c. 13,"{'lat': 46.56056, 'lng': 15.652935}",False,False,20,15,5,OPEN,1712959515000,10.4,82,7.5,9.2,0,0.0,998.9
 11,maribor,PARTIZANSKA C. - CANKARJEVA UL.,Partizanska c. 13,"{'lat': 46.56056, 'lng': 15.652935}",False,False,20,15,5,OPEN,1712963149000,10.4,82,7.5,9.2,0,0.0,998.9
+11,maribor,PARTIZANSKA C. - CANKARJEVA UL.,Partizanska c. 13,"{'lat': 46.56056, 'lng': 15.652935}",False,False,20,15,5,OPEN,1712969806000,11.7,85,9.2,11.1,0,0.0,995.7
