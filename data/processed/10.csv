@@ -473,3 +473,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 10,maribor,TELEMACH - GLAVNI TRG - STARI PERON,Glavni trg 20,"{'lat': 46.557328, 'lng': 15.646833}",False,False,20,4,16,OPEN,1713006404000,24.6,40,10.1,24.0,0,0.0,994.7
 10,maribor,TELEMACH - GLAVNI TRG - STARI PERON,Glavni trg 20,"{'lat': 46.557328, 'lng': 15.646833}",False,False,20,3,17,OPEN,1713011257000,24.7,39,9.8,23.4,0,0.0,994.0
 10,maribor,TELEMACH - GLAVNI TRG - STARI PERON,Glavni trg 20,"{'lat': 46.557328, 'lng': 15.646833}",False,False,20,4,16,OPEN,1713014086000,24.8,40,10.3,23.2,0,0.0,993.4
+10,maribor,TELEMACH - GLAVNI TRG - STARI PERON,Glavni trg 20,"{'lat': 46.557328, 'lng': 15.646833}",False,False,20,4,16,OPEN,1713017333000,24.4,43,11.0,22.8,0,0.0,992.8
