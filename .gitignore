@@ -8,5 +8,4 @@ src/client/node_modules
 src/client/.vscode
 
 src/client/node_modules/.package-lock.json
-/models
 /data
