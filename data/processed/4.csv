@@ -483,3 +483,4 @@ number,contract_name,name,address,position,banking,bonus,bike_stands,available_b
 4,maribor,STROSSMAYERJEVA UL. - TRŽNICA,Strossmayerjeva ulica 3,"{'lat': 46.558498, 'lng': 15.64146}",False,False,20,9,11,OPEN,1713042778000,15.6,60,7.8,14.6,0,0.0,991.8
 4,maribor,STROSSMAYERJEVA UL. - TRŽNICA,Strossmayerjeva ulica 3,"{'lat': 46.558498, 'lng': 15.64146}",False,False,20,11,9,OPEN,1713046414000,11.6,87,9.5,10.8,0,0.0,996.5
 4,maribor,STROSSMAYERJEVA UL. - TRŽNICA,Strossmayerjeva ulica 3,"{'lat': 46.558498, 'lng': 15.64146}",False,False,20,13,7,OPEN,1713050053000,11.6,87,9.5,10.8,0,0.0,996.5
+4,maribor,STROSSMAYERJEVA UL. - TRŽNICA,Strossmayerjeva ulica 3,"{'lat': 46.558498, 'lng': 15.64146}",False,False,20,14,6,OPEN,1713058841000,11.9,76,7.8,11.1,0,0.0,990.0
