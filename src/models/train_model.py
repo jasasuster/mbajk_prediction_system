@@ -183,3 +183,6 @@ def main():
     model_t.save(f'{model_save_dir}/multi_gru_model.h5')
     joblib.dump(bk_scaler_t, f'{model_save_dir}/multi_gru_bk_scaler.pkl')
     joblib.dump(fo_scaler_t, f'{model_save_dir}/multi_gru_fo_scaler.pkl')
+
+if __name__ == "__main__":
+  main()

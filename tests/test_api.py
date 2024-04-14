@@ -8,7 +8,7 @@ class TestAPI(TestCase):
     app = create_app()
     app.config['TESTING'] = True
     return app
-  
+
   def test_predict(self):
     data = {
       "station_number": 5

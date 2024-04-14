@@ -1,41 +1,43 @@
 import requests
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-from src.data.process_data import process_data
+import os
+import json
+from datetime import timedelta
 
+hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
 
-def hour_rounder(t):
-  # Rounds to nearest hour by adding a timedelta hour if minute >= 30
-  return (t.replace(second=0, microsecond=0, minute=0, hour=t.hour)+timedelta(hours=t.minute//30)).strftime('%Y-%m-%dT%H:%M')
+def extract_coordinates(station_data):
+  latitudes = [station['position']['lat'] for station in station_data]
+  longitudes = [station['position']['lng'] for station in station_data]
+  return latitudes, longitudes
 
-def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variables):
+def read_json(file_path):
+  with open(file_path, 'r') as file:
+    return json.load(file)
+
+def save_data_to_json(data):
+  data_output_dir = os.path.join('data', 'raw', 'weather')
+  os.makedirs(data_output_dir, exist_ok=True)
+  raw_output_file_path = os.path.join(data_output_dir, f'fetched_data_weather.json')
+  with open(raw_output_file_path, 'w', encoding='utf-8') as file:
+    json.dump(data, file, ensure_ascii=False, indent=4)
+
+def main():
+  # get latitudes and longitudes from file
+  station_data_path = os.path.join('data', 'preprocessed', 'bike', 'preprocessed_data_bike.json')
+  station_data = read_json(station_data_path)
+  latitudes, longitudes = extract_coordinates(station_data)
+
   weather_url = "https://api.open-meteo.com/v1/forecast"
   params = {
     "latitude": latitudes,
     "longitude": longitudes,
     "hourly": hourly_variables,
-    "forecast_days": forecast_days
+    "timezone": "Europe/Berlin",
+    "forecast_days": 1
   }
   response = requests.get(weather_url, params=params)
   data = response.json()
-  return data
+  save_data_to_json(data)
 
-  rounded_time = hour_rounder(datetime.now(ZoneInfo("Europe/Ljubljana")))
-  print('rounded_time:', rounded_time)
-  closest_weather_data_list = []
-
-  forecast_times = data['hourly']['time']
-  print('forecast_times:', forecast_times)
-  if rounded_time not in forecast_times:
-    rounded_time = forecast_times[0]
-
-  for forecast_object in data:
-    if forecast_object:
-      print('forecast_object:', forecast_object)
-      weather_data = forecast_object['hourly']
-      closest_weather_data = {key: value[forecast_times.index(rounded_time)] for key, value in weather_data.items() if key != 'time'}
-      renamed_weather_data = {k.replace('_2m', ''): v for k, v in closest_weather_data.items()}
-      closest_weather_data_list.append(renamed_weather_data)
-
-  print('closest_weather_data_list:', closest_weather_data_list)
-  return closest_weather_data_list
+if __name__ == "__main__":
+  main()
