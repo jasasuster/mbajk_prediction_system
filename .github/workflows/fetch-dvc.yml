@@ -54,21 +54,34 @@ jobs:
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
 
-      - name: Setup AWS credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Setup Dagshub
         run: |
-          DVC_REMOTE_URL=$(grep 'url =' .dvc/config | cut -d ' ' -f 3)
-          DVC_ENDPOINT_URL=$(grep 'endpointurl =' .dvc/config | cut -d ' ' -f 3)
-          echo "DVC_REMOTE_URL=$DVC_REMOTE_URL" >> $GITHUB_ENV
-          echo "DVC_ENDPOINT_URL=$DVC_ENDPOINT_URL" >> $GITHUB_ENV
+          dvc remote add origin $(grep 'url =' .dvc/config | cut -d ' ' -f 3)
+          dvc remote modify origin endpointurl $(grep 'endpointurl =' .dvc/config | cut -d ' ' -f 3)
+          dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Set DVC default remote
-        run: dvc remote default origin
-
-      - name: DVC repro
-        run: dvc repro
+      - name: Pull data
+        run: dvc pull
 
       - name: DVC push
         run: dvc push
+
+      # - name: Setup AWS credentials
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   run: |
+      #     DVC_REMOTE_URL=$(grep 'url =' .dvc/config | cut -d ' ' -f 3)
+      #     DVC_ENDPOINT_URL=$(grep 'endpointurl =' .dvc/config | cut -d ' ' -f 3)
+      #     echo "DVC_REMOTE_URL=$DVC_REMOTE_URL" >> $GITHUB_ENV
+      #     echo "DVC_ENDPOINT_URL=$DVC_ENDPOINT_URL" >> $GITHUB_ENV
+
+      # - name: Set DVC default remote
+      #   run: poetry run dvc remote default origin
+
+      # - name: DVC repro
+      #   run: poetry run dvc repro
+
+      # - name: DVC push
+      #   run: poetry run dvc push
