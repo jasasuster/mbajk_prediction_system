@@ -3,7 +3,6 @@ import os
 import json
 import re
 from datetime import datetime
-from zoneinfo import ZoneInfo
 
 hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
 
