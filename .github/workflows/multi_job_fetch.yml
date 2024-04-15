@@ -141,7 +141,7 @@ jobs:
         run: poetry run fetch_weather_data
 
  preprocess_weather_data:
-    needs: preprocess_bike_data
+    needs: fetch_weather_data
     runs-on: ubuntu-latest
 
     permissions:
