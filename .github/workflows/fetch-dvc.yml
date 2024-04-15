@@ -50,7 +50,7 @@ jobs:
       - run: poetry run fetch
 
       - name: Setup DVC
-        uses: iterative/setup-dvc@v2
+        uses: iterative/setup-dvc@v1
 
       - name: Setup AWS credentials
         env:
@@ -65,8 +65,4 @@ jobs:
           echo "DVC_ENDPOINT_URL=$DVC_ENDPOINT_URL" >> $GITHUB_ENV
 
         - name: DVC push
-          run: dvc push 
-
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Automated data fetch
+          run: dvc push
