@@ -62,8 +62,20 @@ jobs:
         run: |
           poetry run dvc pull -r origin
 
+      - name: Unprotect
+        run: |
+          poetry run dvc unprotect data
+
       - run: poetry run fetch
+
+      - name: Add data to DVC
+        run: |
+          poetry run dvc add data
 
       - name: DVC push
         run: |
           poetry run dvc push -r origin
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update data dvc
