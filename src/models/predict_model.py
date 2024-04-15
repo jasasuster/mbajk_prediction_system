@@ -3,12 +3,31 @@ from tensorflow.keras.models import load_model
 import joblib
 import ast
 import math
+import requests
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from src.data.fetch_weather_data import fetch_weather_forecast, hour_rounder
+from src.data.fetch_weather_data import fetch_weather_forecast
+
+def hour_rounder(t):
+  # Rounds to nearest hour by adding a timedelta hour if minute >= 30
+  return (t.replace(second=0, microsecond=0, minute=0, hour=t.hour)+timedelta(hours=t.minute//30)).strftime('%Y-%m-%dT%H:%M')
+
+def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variables):
+  weather_url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+    "latitude": latitudes,
+    "longitude": longitudes,
+    "hourly": hourly_variables,
+    "forecast_days": forecast_days,
+    "timezone": "Europe/Berlin",
+    "forecast_days": 1
+  }
+  response = requests.get(weather_url, params=params)
+  data = response.json()
+  return data
 
 def check_missing_features(data, expected_features):
   for feature in expected_features:
