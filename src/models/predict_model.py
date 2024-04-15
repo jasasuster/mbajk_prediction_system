@@ -1,10 +1,14 @@
 from tensorflow.keras.models import load_model
 
 import joblib
+import ast
+import math
 import pandas as pd
+import numpy as np
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
-loaded_model = load_model('./models/uni_gru_model.h5')
-loaded_scaler = joblib.load('./models/uni_gru_scaler.pkl')
+from src.data.fetch_weather_data import fetch_weather_forecast, hour_rounder
 
 def check_missing_features(data, expected_features):
   for feature in expected_features:
@@ -12,33 +16,77 @@ def check_missing_features(data, expected_features):
       return {'error': f'Missing feature: {feature}'}, 400
   return None
 
-def preprocess_data(data):
-  if len(data) != 45:
-    return {'error': 'Invalid data length'}, 400
+def create_multi_array(df, loaded_bk_scaler, loaded_fo_scaler):
+  df_multi = df[['temperature', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure', 'relative_humidity']]
+  multi_array = df_multi.values
   
-  expected_features = ['date', 'available_bike_stands']
+  bike_stands = multi_array[:, -1]
+  bike_stands_normalized = loaded_bk_scaler.transform(bike_stands.reshape(-1, 1))
 
-  for obj in data:
-    missing_feature_error = check_missing_features(obj, expected_features)
-    if missing_feature_error:
-      return missing_feature_error
+  other_features = multi_array[:,1:]
+  other_features_normalized = loaded_fo_scaler.transform(other_features)
+
+  multi_array_scaled = np.column_stack([bike_stands_normalized, other_features_normalized])
+
+  multi_array_scaled = multi_array_scaled.reshape(1, multi_array_scaled.shape[1], multi_array_scaled.shape[0])
+
+  return multi_array_scaled
+
+def preprocess_data(data, bk_scaler, fo_scaler):
+  expected_features = ['temperature', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure', 'relative_humidity']
+
+  missing_feature_error = check_missing_features(data, expected_features)
+  if missing_feature_error:
+    return missing_feature_error
     
-  df = pd.DataFrame(data)
-  df['date'] = pd.to_datetime(df['date'])
+  df = data
+  df['date'] = pd.to_datetime(df['last_update'], unit='ms')
   df = df.sort_values(by='date')
 
-  df_uni = df['available_bike_stands']
-  uni_array = df_uni.values.reshape(-1, 1)
-  uni_array = loaded_scaler.transform(uni_array)
+  multi_array = create_multi_array(df, bk_scaler, fo_scaler)
 
-  uni_array = uni_array.reshape(uni_array.shape[1], 1, uni_array.shape[0])
+  return multi_array
 
-  return uni_array
+def predict(station_name):
+  df = pd.read_csv(f'./data/processed/{station_name}.csv')
 
-def predict(data):
-  uni_array = preprocess_data(data)
+  position = df['position'][0]
+  position = ast.literal_eval(position)
+  latitude = position['lat']
+  longitude = position['lng']
+  hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
+  data = df.tail(30)  # get last 30 for prediction
 
-  prediction = loaded_model.predict(uni_array)
-  prediction = loaded_scaler.inverse_transform(prediction)
+  weather_data = fetch_weather_forecast(latitude, longitude, 3, hourly_variables)
+  weather_data = pd.DataFrame(weather_data)
+  rounded_time = hour_rounder(datetime.now(ZoneInfo("Europe/Ljubljana")))
+  index = weather_data['hourly']['time'].index(rounded_time)
 
-  return prediction.tolist()[0][0]
+  weather_df = pd.DataFrame()
+  for i, row in weather_data.iterrows():
+    hourly = row['hourly'][index + 1:index + 8]
+    weather_df[row.name] = hourly
+
+  row_names = {'temperature_2m':'temperature', 'relative_humidity_2m':'relative_humidity', 'dew_point_2m':'dew_point'}
+  weather_df = weather_df.rename(columns=row_names)
+
+  model_dir = f'./models/{station_name}'
+  loaded_model = load_model(f'{model_dir}/multi_gru_model.h5')
+  loaded_bk_scaler = joblib.load(f'{model_dir}/multi_gru_bk_scaler.pkl')
+  loaded_fo_scaler = joblib.load(f'{model_dir}/multi_gru_fo_scaler.pkl')
+
+  predictions = []
+  for i in range(7):
+    multi_array = preprocess_data(data, loaded_bk_scaler, loaded_fo_scaler)
+    prediction = loaded_model.predict(multi_array)
+    prediction = loaded_bk_scaler.inverse_transform(prediction).tolist()[0][0]
+    predictions.append(math.floor(prediction))
+
+    forecast_data = weather_df.iloc[i]
+    forecast_data['available_bike_stands'] = math.floor(prediction)
+
+    new_row_df = pd.DataFrame([forecast_data])
+    data = pd.concat([data, new_row_df], ignore_index=True)
+    data = data.iloc[1:]
+
+  return predictions

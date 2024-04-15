@@ -1,53 +1,74 @@
 import requests
-import csv
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+from src.data.process_data import process_data
 
-# Fetch data
-url = "https://api.jcdecaux.com/vls/v1/stations?contract=maribor&apiKey=5e150537116dbc1786ce5bec6975a8603286526b"
-response = requests.get(url)
-data = response.json()
+def hour_rounder(t):
+  # Rounds to nearest hour by adding a timedelta hour if minute >= 30
+  return (t.replace(second=0, microsecond=0, minute=0, hour=t.hour)+timedelta(hours=t.minute//30)).strftime('%Y-%m-%dT%H:%M')
 
-timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variables):
+  weather_url = "https://api.open-meteo.com/v1/forecast"
+  params = {
+    "latitude": latitudes,
+    "longitude": longitudes,
+    "hourly": hourly_variables,
+    "forecast_days": forecast_days
+  }
+  response = requests.get(weather_url, params=params)
+  data = response.json()
 
-# Get directory of the current script and define the output file path
-script_dir = os.path.dirname(os.path.realpath(__file__)) # Get the directory of the current script
-data_output_dir = os.path.join(script_dir, '..', '..', 'data', 'raw') # Adjust the path as necessary
-raw_output_file_path = os.path.join(data_output_dir, f'fetched_data_{timestamp}.json')
-os.makedirs(data_output_dir, exist_ok=True)
+  rounded_time = hour_rounder(datetime.now(ZoneInfo("Europe/Ljubljana")))
+  closest_weather_data_list = []
 
-# Write the data to JSON file
-with open(raw_output_file_path, 'w', encoding='utf-8') as file:
+  forecast_times = data[0]['hourly']['time']
+  if rounded_time not in forecast_times:
+    rounded_time = forecast_times[0]
+
+  for forecast_object in data:
+    if forecast_object:
+      weather_data = forecast_object['hourly']
+      closest_weather_data = {key: value[forecast_times.index(rounded_time)] for key, value in weather_data.items() if key != 'time'}
+      renamed_weather_data = {k.replace('_2m', ''): v for k, v in closest_weather_data.items()}
+      closest_weather_data_list.append(renamed_weather_data)
+
+  return closest_weather_data_list
+
+def extract_coordinates(station_data):
+    latitudes = [station['position']['lat'] for station in station_data]
+    longitudes = [station['position']['lng'] for station in station_data]
+    return latitudes, longitudes
+
+def fetch_bike_station_data(contract, api_key):
+  url = f"https://api.jcdecaux.com/vls/v1/stations?contract={contract}&apiKey={api_key}"
+  response = requests.get(url)
+  data = response.json()
+  return data
+
+def save_data_to_json(data, timestamp, dict):
+  script_dir = os.path.dirname(os.path.realpath(__file__))
+  data_output_dir = os.path.join(script_dir, '..', '..', 'data', 'raw', dict)
+  os.makedirs(data_output_dir, exist_ok=True)
+  raw_output_file_path = os.path.join(data_output_dir, f'fetched_data_{timestamp}.json')
+  with open(raw_output_file_path, 'w', encoding='utf-8') as file:
     json.dump(data, file, ensure_ascii=False, indent=4)
+  return raw_output_file_path
 
-data_output_dir = os.path.join(script_dir, '..', '..', 'data', 'processed')
-os.makedirs(data_output_dir, exist_ok=True)
+def main():
+  forecast_days = 1
+  hourly_variables = ["temperature_2m", "relative_humidity_2m", "dew_point_2m", "apparent_temperature", "precipitation_probability", "rain", "surface_pressure"]
+  timestamp = datetime.now(ZoneInfo("Europe/Ljubljana")).strftime('%Y%m%d_%H%M%S')
 
-# Write the data to a CSV file
-for station in data:
-    # Extract the station's unique name attribute
-    station_name = station['name']
-    
-    # Create a filename for the CSV file based on the station's name
-    filename = f"{station_name.replace(' ', '_')}.csv"
-    filepath = os.path.join(data_output_dir, filename)
-    
-    # Check if the file already exists
-    file_exists = os.path.isfile(filepath)
-    
-    # Open the file in append mode if it exists, otherwise create a new file and write the header
-    mode = 'a' if file_exists else 'w'
-    with open(filepath, mode, newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        
-        # Write the header if the file is new
-        if not file_exists:
-            header = station.keys()
-            writer.writerow(header)
-        
-        # Write the station's data
-        writer.writerow(station.values())
+  bike_station_data = fetch_bike_station_data("maribor", "5e150537116dbc1786ce5bec6975a8603286526b")
+  latitudes, longitudes = extract_coordinates(bike_station_data)
+  save_data_to_json(bike_station_data, timestamp, 'mbajk')
 
-print(f'Data has been written to {raw_output_file_path}')
-print("Data has been written to separate CSV files.")
+  weather_data = fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variables)
+  save_data_to_json(weather_data, timestamp, 'weather')
+
+  process_data(bike_station_data, weather_data)
+
+if __name__ == "__main__":
+  main()

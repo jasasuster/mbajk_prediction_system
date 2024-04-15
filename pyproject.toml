@@ -17,6 +17,7 @@ sklearn-preprocessing = "^0.1.0"
 scikit-learn = "^1.4.1.post1"
 tensorflow-io-gcs-filesystem = "0.27.0"
 tensorflow = "~2.10"
+flask-cors = "^4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
@@ -29,4 +30,10 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 serve = "src.serve.api:main"
-train = "src.models.train_model:train"
+train = "src.models.train_model:main"
+fetch = "src.data.fetch_data:main"
+fetch_bike_data = "src.data.fetch_bike_data:main"
+fetch_weather_data = "src.data.fetch_weather_data:main"
+preprocess_bike_data = "src.data.preprocess_bike_data:main"
+preprocess_weather_data = "src.data.preprocess_weather_data:main"
+merge_data = "src.data.merge_processed_data:main"
