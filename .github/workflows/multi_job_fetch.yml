@@ -1,15 +1,15 @@
 name: Fetch and Process Data
 
 on:
- schedule:
+  schedule:
     - cron: '0 * * * *'
- workflow_dispatch:
+  workflow_dispatch:
 
 permissions:
- contents: read
+  contents: read
 
 jobs:
- fetch_bike_data:
+  fetch_bike_data:
     runs-on: ubuntu-latest
 
     permissions:
@@ -52,7 +52,11 @@ jobs:
       - name: Fetch bike data
         run: poetry run fetch_bike_data
 
- preprocess_bike_data:
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Automated bike data fetch
+
+  preprocess_bike_data:
     needs: fetch_bike_data
     runs-on: ubuntu-latest
 
@@ -96,7 +100,11 @@ jobs:
       - name: Preprocess bike data
         run: poetry run preprocess_bike_data
 
- fetch_weather_data:
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Automated bike data preprocessing
+
+  fetch_weather_data:
     needs: preprocess_bike_data
     runs-on: ubuntu-latest
 
@@ -140,7 +148,11 @@ jobs:
       - name: Fetch weather data
         run: poetry run fetch_weather_data
 
- preprocess_weather_data:
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Automated weather data fetch
+
+  preprocess_weather_data:
     needs: fetch_weather_data
     runs-on: ubuntu-latest
 
@@ -183,8 +195,12 @@ jobs:
 
       - name: Preprocess weather data
         run: poetry run preprocess_weather_data
-        
- merge_data:
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Automated weather data preprocessing
+
+  merge_data:
     needs: preprocess_weather_data
     runs-on: ubuntu-latest
 
@@ -227,3 +243,7 @@ jobs:
 
       - name: Merge processed data
         run: poetry run merge_data
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Automated data merge
