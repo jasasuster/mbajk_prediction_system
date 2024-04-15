@@ -94,6 +94,8 @@ jobs:
 
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
+        with:
+          version: '3.48.4'
 
       - name: Setup Dagshub
         run: |
@@ -167,6 +169,8 @@ jobs:
 
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
+        with:
+          version: '3.48.4'
   
       - name: Setup Dagshub
         run: |
@@ -240,6 +244,8 @@ jobs:
 
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
+        with:
+          version: '3.48.4'
   
       - name: Setup Dagshub
         run: |
@@ -313,6 +319,8 @@ jobs:
 
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
+        with:
+          version: '3.48.4'
   
       - name: Setup Dagshub
         run: |
@@ -386,6 +394,8 @@ jobs:
 
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
+        with:
+          version: '3.48.4'
   
       - name: Setup Dagshub
         run: |
