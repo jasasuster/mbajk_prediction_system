@@ -60,9 +60,8 @@ jobs:
           # Extract URL and Endpoint from .dvc/config
           DVC_REMOTE_URL=$(grep 'url =' .dvc/config | cut -d ' ' -f 3)
           DVC_ENDPOINT_URL=$(grep 'endpointurl =' .dvc/config | cut -d ' ' -f 3)
-
           echo "DVC_REMOTE_URL=$DVC_REMOTE_URL" >> $GITHUB_ENV
           echo "DVC_ENDPOINT_URL=$DVC_ENDPOINT_URL" >> $GITHUB_ENV
 
-        - name: DVC push
-          run: dvc push
+      - name: DVC push
+        run: dvc push
