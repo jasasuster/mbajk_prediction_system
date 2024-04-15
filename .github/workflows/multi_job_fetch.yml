@@ -92,12 +92,37 @@ jobs:
 
       - run: poetry install --no-interaction
 
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Setup Dagshub
+        run: |
+          poetry run dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
+          poetry run dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          poetry run dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Pull data
+        run: |
+          poetry run dvc pull -r origin
+
+      - name: Unprotect
+        run: |
+          poetry run dvc unprotect data
+
       - name: Fetch bike data
         run: poetry run fetch_bike_data
 
+      - name: Add data to DVC
+        run: |
+          poetry run dvc add data
+
+      - name: DVC push
+        run: |
+          poetry run dvc push -r origin
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Automated bike data fetch
+          commit_message: Update data dvc
 
   preprocess_bike_data:
     needs: fetch_bike_data
@@ -140,12 +165,37 @@ jobs:
 
       - run: poetry install --no-interaction
 
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+  
+      - name: Setup Dagshub
+        run: |
+          poetry run dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
+          poetry run dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          poetry run dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Pull data
+        run: |
+          poetry run dvc pull -r origin
+
+      - name: Unprotect
+        run: |
+          poetry run dvc unprotect data
+
       - name: Preprocess bike data
         run: poetry run preprocess_bike_data
 
+      - name: Add data to DVC
+        run: |
+          poetry run dvc add data
+
+      - name: DVC push
+        run: |
+          poetry run dvc push -r origin
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Automated bike data preprocessing
+          commit_message: Update data dvc
 
   fetch_weather_data:
     needs: preprocess_bike_data
@@ -188,12 +238,37 @@ jobs:
 
       - run: poetry install --no-interaction
 
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+  
+      - name: Setup Dagshub
+        run: |
+          poetry run dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
+          poetry run dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          poetry run dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Pull data
+        run: |
+          poetry run dvc pull -r origin
+
+      - name: Unprotect
+        run: |
+          poetry run dvc unprotect data
+
       - name: Fetch weather data
         run: poetry run fetch_weather_data
 
+      - name: Add data to DVC
+        run: |
+          poetry run dvc add data
+
+      - name: DVC push
+        run: |
+          poetry run dvc push -r origin
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Automated weather data fetch
+          commit_message: Update data dvc
 
   preprocess_weather_data:
     needs: fetch_weather_data
@@ -236,12 +311,37 @@ jobs:
 
       - run: poetry install --no-interaction
 
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+  
+      - name: Setup Dagshub
+        run: |
+          poetry run dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
+          poetry run dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          poetry run dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Pull data
+        run: |
+          poetry run dvc pull -r origin
+
+      - name: Unprotect
+        run: |
+          poetry run dvc unprotect data
+
       - name: Preprocess weather data
         run: poetry run preprocess_weather_data
 
+      - name: Add data to DVC
+        run: |
+          poetry run dvc add data
+
+      - name: DVC push
+        run: |
+          poetry run dvc push -r origin
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Automated weather data preprocessing
+          commit_message: Update data dvc
 
   merge_data:
     needs: preprocess_weather_data
@@ -284,9 +384,34 @@ jobs:
 
       - run: poetry install --no-interaction
 
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+  
+      - name: Setup Dagshub
+        run: |
+          poetry run dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
+          poetry run dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          poetry run dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Pull data
+        run: |
+          poetry run dvc pull -r origin
+
+      - name: Unprotect
+        run: |
+          poetry run dvc unprotect data
+
       - name: Merge processed data
         run: poetry run merge_data
 
+      - name: Add data to DVC
+        run: |
+          poetry run dvc add data
+
+      - name: DVC push
+        run: |
+          poetry run dvc push -r origin
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Automated data merge
+          commit_message: Update data dvc
