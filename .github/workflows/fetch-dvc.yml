@@ -52,10 +52,15 @@ jobs:
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
 
+      - name: Pull data
+        run: |
+          poetry run dvc pull -r origin
+
       - run: poetry run fetch
-      
+
       - name: DVC push
-        run: dvc push
+        run: |
+          poetry run dvc push
 
       # - name: Setup AWS credentials
       #   env:
