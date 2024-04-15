@@ -54,13 +54,6 @@ jobs:
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
 
-      - name: Setup Dagshub
-        run: |
-          dvc remote add origin s3://dvc
-          dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
-          dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - name: Pull data
         run: dvc pull
 
