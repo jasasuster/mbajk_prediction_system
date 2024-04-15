@@ -9,7 +9,50 @@ permissions:
   contents: read
 
 jobs:
+  test_apis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: cache poetry install
+        uses: actions/cache@v2
+        with:
+          path: ~/.local
+          key: poetry-1.8.2
+
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.8.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: cache deps
+        id: cache-deps
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: pydeps-${{ hashFiles('**/poetry.lock') }}
+
+      - run: poetry install --no-interaction --no-root
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+
+      - run: poetry install --no-interaction
+
+      - name: Test APIs
+        run: |
+          poetry run python tests/test_mbajk_api.py
+          poetry run python tests/test_weather_api.py
+
   fetch_bike_data:
+    needs: test_apis
     runs-on: ubuntu-latest
 
     permissions:
