@@ -25,20 +25,6 @@ def read_json(bike_directory_path):
     print("No matching files found.")
     return None
 
-def extract_data(data):
-  extracted_data = []
-  for item in data:
-    extracted_item = {
-      'number': item['number'],
-      'last_update': item['last_update'],
-      'position': item['position'],
-      'bike_stands': item['bike_stands'],
-      'available_bike_stands': item['available_bike_stands'],
-      'available_bikes': item['available_bikes']
-    }
-    extracted_data.append(extracted_item)
-  return extracted_data
-
 def save_data_to_json(data, timestamp):
   data_output_dir = os.path.join('data', 'preprocessed', 'mbajk')
   os.makedirs(data_output_dir, exist_ok=True)
@@ -50,8 +36,7 @@ def main():
   bike_directory_path = os.path.join('data', 'raw', 'mbajk')
   data, timestamp = read_json(bike_directory_path)
   if data:
-    extracted_data = extract_data(data)
-    save_data_to_json(extracted_data, timestamp)
+    save_data_to_json(data, timestamp)
 
 if __name__ == "__main__":
   main()
