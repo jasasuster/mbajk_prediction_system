@@ -20,11 +20,17 @@ tensorflow = "~2.10"
 flask-cors = "^4.0.0"
 dvc = "^3.49.0"
 dvc-s3 = "^3.1.0"
+great-expectations = "^0.18.12"
+evidently = "^0.4.19"
+mlflow = "^2.12.1"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
 flask-testing = "^0.8.1"
 ipykernel = "^6.29.3"
+black = "^24.4.0"
+jupyter = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
