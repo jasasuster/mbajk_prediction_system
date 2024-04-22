@@ -64,7 +64,4 @@ jobs:
 
       - name: Run data validation
         run: |
-          poetry run great_expectations validate
-
-
-
+          poetry run python gx/run_mbajk_first_checkpoint.py
