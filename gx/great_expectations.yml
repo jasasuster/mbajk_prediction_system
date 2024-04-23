@@ -20,13 +20,13 @@ config_variables_file_path: uncommitted/config_variables.yml
 plugins_directory: plugins/
 
 stores:
-# Stores are configurable places to store things like Expectations, Validations
-# Data Docs, and more. These are for advanced users only - most users can simply
-# leave this section alone.
-#
-# Three stores are required: expectations, validations, and
-# evaluation_parameters, and must exist with a valid store entry. Additional
-# stores can be configured for uses such as data_docs, etc.
+  # Stores are configurable places to store things like Expectations, Validations
+  # Data Docs, and more. These are for advanced users only - most users can simply
+  # leave this section alone.
+  #
+  # Three stores are required: expectations, validations, and
+  # evaluation_parameters, and must exist with a valid store entry. Additional
+  # stores can be configured for uses such as data_docs, etc.
   expectations_store:
     class_name: ExpectationsStore
     store_backend:
@@ -82,12 +82,38 @@ include_rendered_content:
   globally: false
   expectation_suite: false
   expectation_validation_result: false
-fluent_datasources:
-  mbajk_datasource:
-    type: pandas_filesystem
-    assets:
-      my_asset:
-        type: csv
-        batching_regex: current_data\.csv
-    base_directory: ..\data\processed
-datasources: {}
+# fluent_datasources:
+#   mbajk_datasource:
+#     type: pandas_filesystem
+#     assets:
+#       my_asset:
+#         type: csv
+#         batching_regex: current_data\.csv
+#     base_directory: ..\data\processed
+datasources:
+  my_datasource:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: PandasExecutionEngine
+      module_name: great_expectations.execution_engine
+    data_connectors:
+      default_inferred_data_connector_name:
+        name: default_inferred_data_connector_name
+        class_name: InferredAssetFilesystemDataConnector
+        module_name: great_expectations.datasource.data_connector
+        base_directory: ..\data\processed
+        default_regex:
+          group_names:
+            - data_asset_name
+          pattern: (.*)
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        assets:
+          my_runtime_asset_name:
+            class_name: Asset
+            module_name: great_expectations.datasource.data_connector.asset
+            batch_identifiers:
+              - runtime_batch_identifier_name

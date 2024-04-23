@@ -6,7 +6,7 @@ context = gx.get_context()
 
 print(context)
 
-result = context.run_checkpoint(checkpoint_name="mbajk_checkpoint")
+result = context.run_checkpoint(checkpoint_name="test_checkpoint")
 
 if not result["success"]:
     print("Validation failed!")
