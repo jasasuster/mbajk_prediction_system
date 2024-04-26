@@ -1,4 +1,4 @@
-name: Run data test
+name: Data validation and testing
 
 on:
   workflow_dispatch:
