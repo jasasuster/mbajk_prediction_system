@@ -139,6 +139,7 @@ jobs:
           commit_message: Update data dvc
 
   validate_data:
+    needs: fetch_preprocess_merge_data
     runs-on: ubuntu-latest
 
     steps:
