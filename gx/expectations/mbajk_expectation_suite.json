@@ -1,7 +1,39 @@
 {
   "data_asset_type": null,
-  "expectation_suite_name": "mbajk_expecation_suite",
+  "expectation_suite_name": "mbajk_expectation_suite",
   "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "name",
+          "available_bike_stands",
+          "dew_point",
+          "temperature",
+          "last_update",
+          "contract_name",
+          "rain",
+          "bike_stands",
+          "address",
+          "bonus",
+          "apparent_temperature",
+          "relative_humidity",
+          "banking",
+          "available_bikes",
+          "status",
+          "position",
+          "precipitation_probability",
+          "number",
+          "surface_pressure"
+        ],
+        "exact_match": null
+      },
+      "meta": {
+        "profiler_details": {
+          "success_ratio": 1.0
+        }
+      }
+    },
     {
       "expectation_type": "expect_column_values_to_not_be_null",
       "kwargs": {
@@ -138,6 +170,12 @@
   ],
   "ge_cloud_id": null,
   "meta": {
+    "citations": [
+      {
+        "citation_date": "2024-04-22T10:35:58.529599Z",
+        "comment": "Created by effective Rule-Based Profiler of OnboardingDataAssistant with the configuration included.\n"
+      }
+    ],
     "great_expectations_version": "0.18.12"
   }
 }

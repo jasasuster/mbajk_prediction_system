@@ -25,11 +25,7 @@ from great_expectations.checkpoint.types.checkpoint_result import (
 )
 from great_expectations.data_context import FileDataContext, get_context
 
-data_context: FileDataContext = get_context(context_root_dir=os.path.join(os.path.dirname(__file__), "../gx"))
-
-retrieved_checkpoint = data_context.get_checkpoint(name="mbajk_checkpoint")
-
-print(retrieved_checkpoint)
+data_context: FileDataContext = get_context(context_root_dir=os.path.dirname(__file__))
 
 result: CheckpointResult = data_context.run_checkpoint(
     checkpoint_name="mbajk_checkpoint",
