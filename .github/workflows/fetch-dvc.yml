@@ -1,4 +1,4 @@
-name: Fetch bike and weather data to DVC
+name: Full Data Workflow
 
 on:
   schedule:
@@ -9,7 +9,50 @@ permissions:
   contents: read
 
 jobs:
-  fetch:
+  test_apis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: cache poetry install
+        uses: actions/cache@v2
+        with:
+          path: ~/.local
+          key: poetry-1.8.2
+
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.8.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: cache deps
+        id: cache-deps
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: pydeps-${{ hashFiles('**/poetry.lock') }}
+
+      - run: poetry install --no-interaction --no-root
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+
+      - run: poetry install --no-interaction
+
+      - name: Test APIs
+        run: |
+          poetry run python tests/test_mbajk_api.py
+          poetry run python tests/test_weather_api.py
+
+  fetch_preprocess_merge_data:
+    needs: test_apis
     runs-on: ubuntu-latest
 
     permissions:
@@ -19,7 +62,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: 'main'
 
       - uses: actions/setup-python@v2
         with:
@@ -51,6 +94,8 @@ jobs:
 
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
+        with:
+          version: '3.48.4'
 
       - name: Setup Dagshub
         run: |
@@ -66,7 +111,20 @@ jobs:
         run: |
           poetry run dvc unprotect data
 
-      - run: poetry run fetch
+      - name: Fetch bike data
+        run: poetry run fetch_bike_data
+
+      - name: Preprocess bike data
+        run: poetry run preprocess_bike_data
+
+      - name: Fetch weather data
+        run: poetry run fetch_weather_data
+
+      - name: Preprocess weather data
+        run: poetry run preprocess_weather_data
+
+      - name: Merge processed data
+        run: poetry run merge_data
 
       - name: Add data to DVC
         run: |
@@ -79,3 +137,65 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update data dvc
+
+  validate_data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: cache poetry install
+        uses: actions/cache@v2
+        with:
+          path: ~/.local
+          key: poetry-1.8.2
+
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.8.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: cache deps
+        id: cache-deps
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: pydeps-${{ hashFiles('**/poetry.lock') }}
+
+      - run: poetry install --no-interaction --no-root
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+
+      - run: poetry install --no-interaction
+
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+        with:
+          version: '3.48.4'
+
+      - name: Setup Dagshub
+        run: |
+          poetry run dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
+          poetry run dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          poetry run dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Pull data
+        run: |
+          poetry run dvc pull -r origin
+
+      - name: Unprotect
+        run: |
+          poetry run dvc unprotect data
+
+      - name: Run data validation
+        run: |
+          poetry run validate
+
+  # test_and_merge_data:
