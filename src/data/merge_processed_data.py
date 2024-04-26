@@ -38,6 +38,18 @@ def main():
   else:
     print('Error reading json files')
 
+def save_validation_data(station):
+  filename = "current_data.csv"
+  filepath = os.path.join('data', 'validate', filename)
+  file_exists = os.path.isfile(filepath)
+  mode = 'a' if file_exists else 'w'
+  with open(filepath, mode, newline='', encoding='utf-8') as file:
+    writer = csv.writer(file)
+    if not file_exists:
+      header = station.keys()
+      writer.writerow(header)
+    writer.writerow(station.values())
+
 def process_data(bike_data, weather_data):
   merged_data = [
     {**bike_station, **weather_forecast}
@@ -47,6 +59,8 @@ def process_data(bike_data, weather_data):
   os.makedirs(data_output_dir, exist_ok=True)
   for station in merged_data:
     station_number = station['number']
+    if station_number == 1:
+      save_validation_data(station)
     filename = f"{station_number}.csv"
     filepath = os.path.join(data_output_dir, filename)
     file_exists = os.path.isfile(filepath)
