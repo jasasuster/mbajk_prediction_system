@@ -1,4 +1,5 @@
 import sys
+import os
 import pandas as pd
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
@@ -9,7 +10,7 @@ from evidently.tests import TestNumberOfColumnsWithMissingValues, TestNumberOfRo
   TestNumberOfConstantColumns, TestNumberOfDuplicatedRows, TestNumberOfDuplicatedColumns, TestColumnsType, \
   TestNumberOfDriftedColumns
 
-if __name__ == "__main__":
+def main():
   tests = TestSuite(tests=[
     TestNumberOfColumnsWithMissingValues(),
     TestNumberOfRowsWithMissingValues(),
@@ -22,8 +23,11 @@ if __name__ == "__main__":
     DataStabilityTestPreset()
   ])
 
-  current = pd.read_csv("data/validate/current_data.csv")
-  reference = pd.read_csv("data/processed/reference_data.csv")
+  current_path = os.path.join('data', 'validate', 'current_data.csv')
+  reference_path = os.path.join('data', 'processed', 'reference_data.csv')
+
+  current = pd.read_csv(current_path)
+  reference = pd.read_csv(reference_path)
 
   tests.run(reference_data=reference, current_data=current)
 
