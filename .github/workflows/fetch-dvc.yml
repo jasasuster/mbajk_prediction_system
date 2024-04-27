@@ -273,7 +273,7 @@ jobs:
       # merge
       - name: Merge validated data
         run: |
-          poetry run merge_validated
+          cp data/validate/current_data.csv data/processed/reference_data.csv
 
       - name: Add data to DVC
         run: |
