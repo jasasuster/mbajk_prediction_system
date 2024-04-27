@@ -3,6 +3,9 @@ name: Data Test
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test_data:
     runs-on: ubuntu-latest
