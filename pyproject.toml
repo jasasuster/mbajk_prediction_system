@@ -47,3 +47,4 @@ preprocess_weather_data = "src.data.preprocess_weather_data:main"
 merge_data = "src.data.merge_processed_data:main"
 validate = "gx.run_mbajk_checkpoint:main"
 test_data = "src.data.data_test:main"
+split_data = "src.data.split_data:main

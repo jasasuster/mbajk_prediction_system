@@ -212,6 +212,9 @@ jobs:
     needs: validate_data
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -274,6 +277,11 @@ jobs:
       - name: Merge validated data
         run: |
           cp data/validate/current_data.csv data/processed/reference_data.csv
+
+      # split
+      - name: Split data
+        run: |
+          poetry run split_data
 
       - name: Add data to DVC
         run: |
