@@ -208,8 +208,8 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-  validate_data:
-    needs: test_apis
+  vaidate_and_merge_data:
+    needs: validate_data
     runs-on: ubuntu-latest
 
     steps:
