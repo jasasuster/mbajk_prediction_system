@@ -33,12 +33,12 @@ def main():
 
   tests.save_html("reports/stability_tests.html")
 
-  # test_results = tests.as_dict()
+  test_results = tests.as_dict()
 
   # Check if any test failed
-  # if test_results['summary']['failed_tests'] > 0:
-  #   print("Some tests failed:")
-  #   print(test_results['summary']['failed_tests'])
-  #   sys.exit(1)
-  # else:
-  #   print("All tests passed!")
+  if test_results['summary']['failed_tests'] > 0:
+    print("Some tests failed:")
+    print(test_results['summary']['failed_tests'])
+    sys.exit(1)
+  else:
+    print("All tests passed!")

@@ -24,6 +24,7 @@ great-expectations = "^0.18.12"
 evidently = "^0.4.19"
 mlflow = "^2.12.1"
 python-dotenv = "^1.0.1"
+dagshub = "^0.3.25"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
@@ -48,3 +49,4 @@ merge_data = "src.data.merge_processed_data:main"
 validate = "gx.run_mbajk_checkpoint:main"
 test_data = "src.data.data_test:main"
 split_data = "src.data.split_data:main"
+validate_predictions = "src.models.validate_predictions:main"
