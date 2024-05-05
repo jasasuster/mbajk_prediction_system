@@ -3,40 +3,81 @@ import numpy as np
 import joblib
 import os
 import mlflow
+import tf2onnx
 import dagshub.auth
 import dagshub
-
+import tensorflow as tf
 import src.settings as settings
+
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import GRU, Dense
+from mlflow import MlflowClient
+from mlflow.onnx import log_model as log_onnx_model
+from mlflow.sklearn import log_model as log_sklearn_model
+from mlflow.models import infer_signature
 from sklearn.metrics import mean_absolute_error, mean_squared_error, explained_variance_score
 
 bk_scaler = StandardScaler()
 fo_scaler = StandardScaler()
 
+def mlflow_save_scaler(client, scaler_type, scaler, station_number):
+  metadata = {
+    "station_name": station_number,
+    "scaler_type": scaler_type,
+    "expected_features": scaler.n_features_in_,
+    "feature_range": scaler.feature_range,
+  }
+
+  scaler = log_sklearn_model(
+    sk_model=scaler,
+    artifact_path=f"models/{station_number}/{scaler_type}",
+    registered_model_name=f"{scaler_type}_{station_number}",
+    metadata=metadata,
+  )
+
+  scaler_version = client.create_model_version(
+    name=f"{scaler_type}_{station_number}",
+    source=scaler.model_uri,
+    run_id=scaler.run_id
+  )
+
+  client.transition_model_version_stage(
+    name=f"{scaler_type}_{station_number}",
+    version=scaler_version.version,
+    stage="staging",
+  )
+
 def fill_missing_values(df):
   missing_values_df = df[df.isnull().any(axis=1)]
   complete_data_df = df.dropna()
   missing_values_columns = df.columns[df.isnull().any()].tolist()
+  
+  pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('model', RandomForestRegressor())
+  ])
 
   if missing_values_columns == []:
-    return df
+    return df, pipeline
 
   for column in missing_values_columns:
     X = complete_data_df[['available_bike_stands']]
     y = complete_data_df[column]
 
-    model = RandomForestRegressor()
-    model.fit(X, y)
+    # model = RandomForestRegressor()
+    # model.fit(X, y)
+    pipeline.fit(X, y)
 
-    predictions = model.predict(missing_values_df[['available_bike_stands']])
+    # predictions = model.predict(missing_values_df[['available_bike_stands']])
+    predictions = pipeline.predict(missing_values_df[['available_bike_stands']])
     df.loc[missing_values_df.index, column] = predictions
 
   missing_values = df.isna().sum()
   print('Missing values after:\n', missing_values)
-  return df
+  return df, pipeline
 
 def create_multi_array(df):
   df_multi = df[['available_bike_stands', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure', 'relative_humidity']]
@@ -137,21 +178,24 @@ def load_df(path):
   df_hourly.reset_index(inplace=True)
   df_hourly = df_hourly.dropna()
 
-  df_hourly = fill_missing_values(df_hourly)
+  df_hourly, pipeline = fill_missing_values(df_hourly)
 
-  return df_hourly
+  return df_hourly, pipeline
 
-def train(train_df, test_df, reports_save_dir, station_number):
+def train(df, pipeline, reports_save_dir, station_number):
+  client = MlflowClient()
   with mlflow.start_run(run_name=f"station_{station_number}", experiment_id="0", nested=True):
-    train = create_multi_array(train_df)
-    test = create_multi_array(test_df)
+    mlflow.tensorflow.autolog()
+
+    # save pipeline
+    pipeline_ = log_sklearn_model(pipeline, artifact_path=f"models/{station_number}/pipeline", registered_model_name=f"pipeline_{station_number}")
+    mv = client.create_model_version(name=f"station_{station_number}", source=pipeline_.model_uri, run_id=pipeline_.run_id)
+    client.transition_model_version_stage(name=f"station_{station_number}", version=mv.version, stage="staging")
+
+    train, test = split(df)
     train_bike_stands_scaled, test_bike_stands_scaled = split_and_scale_bk(train, test)
     train_features_other_scaled, test_features_other_scaled = split_and_scale_fo(train, test)
     train_scaled, test_scaled = combine_features(train_bike_stands_scaled, test_bike_stands_scaled, train_features_other_scaled, test_features_other_scaled)
-
-    mlflow.log_param("epochs", 15)
-    mlflow.log_param("batch_size", 32)
-    mlflow.log_param("train_dataset_size", len(train))
 
     X_train, y_train, X_test, y_test = reshape_for_model(train_scaled, test_scaled)
 
@@ -161,6 +205,14 @@ def train(train_df, test_df, reports_save_dir, station_number):
     print('Training model...')
     model_history = model.fit(X_train, y_train, epochs=15, validation_split=0.2)
 
+    # save scalers
+    mlflow_save_scaler(client, "bk_scaler", bk_scaler, station_number)
+    mlflow_save_scaler(client, "fo_scaler", fo_scaler, station_number)
+    
+    mlflow.log_param("epochs", 15)
+    mlflow.log_param("batch_size", 32)
+    mlflow.log_param("train_dataset_size", len(train))
+
     predictions = model.predict(X_test)
     predictions_inv = bk_scaler.inverse_transform(predictions)
 
@@ -169,6 +221,19 @@ def train(train_df, test_df, reports_save_dir, station_number):
     for i in range(len(model_history.history['loss'])):
       mlflow.log_metric("loss", model_history.history['loss'][i], step=i)
       mlflow.log_metric("val_loss", model_history.history['val_loss'][i], step=i)
+
+    # ONNX
+    model.output_names = ["output"]
+    input_signature = [
+      tf.TensorSpec(shape=(None, X_train.shape[1], X_train.shape[2]), dtype=tf.double, name="input")
+    ]
+    onnx_model, _ = tf2onnx.convert.from_keras(model=model, input_signature=input_signature, opset=13)
+
+    model_ = log_onnx_model(onnx_model=onnx_model, artifact_path=f"models/{station_number}", signature=infer_signature(X_test, predictions), registered_model_name=f"station_{station_number}")
+
+    mv = client.create_model_version(name=f"station_{station_number}", source=model_.model_uri, run_id=model_.run_id)
+
+    client.transition_model_version_stage(name=f"station_{station_number}", version=mv.version, stage="staging")
 
     mlflow.end_run()
 
@@ -182,8 +247,7 @@ def main():
   path = "./data/processed/"
 
   for station_number in range(1, 30):
-    train_df = load_df(os.path.join(path, f"{station_number}_train.csv"))
-    test_df = load_df(os.path.join(path, f"{station_number}_test.csv"))
+    data, pipeline = load_df(os.path.join(path, f"{station_number}_train.csv"))
 
     model_save_dir = f'./models/{station_number}/'
     reports_save_dir = f'./reports/{station_number}/'
@@ -191,7 +255,7 @@ def main():
 
     print(f'Training model for station {station_number}...')
 
-    model_t, bk_scaler_t, fo_scaler_t = train(train_df, test_df, reports_save_dir, station_number)
+    model_t, bk_scaler_t, fo_scaler_t = train(data, pipeline, reports_save_dir, station_number)
 
     model_t.save(f'{model_save_dir}/multi_gru_model.h5')
     joblib.dump(bk_scaler_t, f'{model_save_dir}/multi_gru_bk_scaler.pkl')
