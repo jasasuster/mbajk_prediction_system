@@ -11,3 +11,5 @@ src/client/node_modules/.package-lock.json
 /data
 /data-file.bin
 src/settings.py
+
+/models

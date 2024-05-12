@@ -10,7 +10,7 @@ def split_data(df):
 
 def main():
   # Station 1
-  df = pd.read_csv('data/processed/reference_data.csv')
+  df = pd.read_csv('data/validate/current_data.csv')
 
   train_df, test_df = split_data(df)
 

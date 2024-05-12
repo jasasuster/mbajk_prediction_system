@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import joblib
 import os
 import mlflow
 import tf2onnx
@@ -183,7 +182,7 @@ def load_df(path):
 def train(df, pipeline, reports_save_dir, station_number):
   client = MlflowClient()
 
-  with mlflow.start_run(run_name=f"station_{station_number}", experiment_id="0", nested=True):
+  with mlflow.start_run(run_name=f"station_{station_number}", experiment_id="2", nested=True):
     # save pipeline
     pipeline_ = log_sklearn_model(sk_model=pipeline, artifact_path=f"models/{station_number}/pipeline", registered_model_name=f"pipeline_{station_number}")
     mv = client.create_model_version(name=f"pipeline_{station_number}", source=pipeline_.model_uri, run_id=pipeline_.run_id)
@@ -232,8 +231,6 @@ def train(df, pipeline, reports_save_dir, station_number):
 
     mlflow.end_run()
 
-    return model, bk_scaler, fo_scaler
-
 def main():
   dagshub.auth.add_app_token(token=settings.MLFLOW_TRACKING_PASSWORD)
   dagshub.init("mbajk_prediction_system", settings.MLFLOW_TRACKING_USERNAME, mlflow=True)
@@ -250,11 +247,7 @@ def main():
 
     print(f'Training model for station {station_number}...')
 
-    model_t, bk_scaler_t, fo_scaler_t = train(data, pipeline, reports_save_dir, station_number)
-
-    # model_t.save(f'{model_save_dir}/multi_gru_model.h5')
-    # joblib.dump(bk_scaler_t, f'{model_save_dir}/multi_gru_bk_scaler.pkl')
-    # joblib.dump(fo_scaler_t, f'{model_save_dir}/multi_gru_fo_scaler.pkl')
+    train(data, pipeline, reports_save_dir, station_number)
 
 if __name__ == "__main__":
   main()

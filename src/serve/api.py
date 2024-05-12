@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_cors import CORS
 
 from src.models.predict_model import predict
+from src.models.mlflow_client import download_all_models
 
 def create_app():
     app = Flask(__name__)
@@ -23,6 +24,9 @@ def create_app():
 
 def main():
     app = create_app()
+
+    download_all_models()
+
     app.run(host='0.0.0.0', port=3000)
 
 if __name__ == '__main__':

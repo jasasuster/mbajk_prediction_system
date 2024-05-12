@@ -6,6 +6,7 @@ import math
 import requests
 import pandas as pd
 import numpy as np
+import onnxruntime as ort
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -21,7 +22,6 @@ def fetch_weather_forecast(latitudes, longitudes, forecast_days, hourly_variable
     "hourly": hourly_variables,
     "forecast_days": forecast_days,
     "timezone": "Europe/Berlin",
-    "forecast_days": 1
   }
   response = requests.get(weather_url, params=params)
   data = response.json()
@@ -44,7 +44,6 @@ def create_multi_array(df, loaded_bk_scaler, loaded_fo_scaler):
   other_features_normalized = loaded_fo_scaler.transform(other_features)
 
   multi_array_scaled = np.column_stack([bike_stands_normalized, other_features_normalized])
-
   multi_array_scaled = multi_array_scaled.reshape(1, multi_array_scaled.shape[1], multi_array_scaled.shape[0])
 
   return multi_array_scaled
@@ -64,8 +63,13 @@ def preprocess_data(data, bk_scaler, fo_scaler):
 
   return multi_array
 
+def get_data(station_name):
+  url = f"https://dagshub.com/jasasuster/mbajk_prediction_system/raw/main/data/processed/{station_name}.csv"
+  df = pd.read_csv(url)
+  return df 
+
 def predict(station_name):
-  df = pd.read_csv(f'./data/processed/{station_name}.csv')
+  df = get_data(station_name)
 
   position = df['position'][0]
   position = ast.literal_eval(position)
@@ -88,14 +92,14 @@ def predict(station_name):
   weather_df = weather_df.rename(columns=row_names)
 
   model_dir = f'./models/{station_name}'
-  loaded_model = load_model(f'{model_dir}/multi_gru_model.h5')
-  loaded_bk_scaler = joblib.load(f'{model_dir}/multi_gru_bk_scaler.pkl')
-  loaded_fo_scaler = joblib.load(f'{model_dir}/multi_gru_fo_scaler.pkl')
+  loaded_model = ort.InferenceSession(f'{model_dir}/model_production.onnx')
+  loaded_bk_scaler = joblib.load(f'{model_dir}/bk_scaler.joblib')
+  loaded_fo_scaler = joblib.load(f'{model_dir}/fo_scaler.joblib')
 
   predictions = []
   for i in range(7):
     multi_array = preprocess_data(data, loaded_bk_scaler, loaded_fo_scaler)
-    prediction = loaded_model.predict(multi_array)
+    prediction = loaded_model.run(["output"], {"input":multi_array})[0]
     prediction = loaded_bk_scaler.inverse_transform(prediction).tolist()[0][0]
     predictions.append(math.floor(prediction))
 

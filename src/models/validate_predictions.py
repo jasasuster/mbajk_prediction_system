@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-import tensorflow as tf
-import joblib
 import os
 import mlflow
 import dagshub.auth
@@ -17,17 +15,13 @@ def evaluate_model(data_path, station_number):
   with mlflow.start_run(run_name=f"station_{station_number}", experiment_id="1", nested=True):
     mlflow.tensorflow.autolog()
 
-    # model = tf.keras.models.load_model('./models/'+station_number+'/multi_gru_model.h5')
-    # loaded_bk_scaler = joblib.load('./models/'+station_number+'/multi_gru_bk_scaler.pkl')
-    # loaded_fo_scaler = joblib.load('./models/'+station_number+'/multi_gru_fo_scaler.pkl')
+    model = mlflow_client.download_latest_model_onnx(station_number, "staging")
+    loaded_bk_scaler = mlflow_client.download_latest_scaler(station_number, "bk_scaler", "staging")
+    loaded_fo_scaler = mlflow_client.download_latest_scaler(station_number, "fo_scaler", "staging")
 
-    model = mlflow_client.download_model_onnx(station_number, "staging")
-    loaded_bk_scaler = mlflow_client.download_scaler(station_number, "bk_scaler", "staging")
-    loaded_fo_scaler = mlflow_client.download_scaler(station_number, "fo_scaler", "staging")
-
-    production_model = mlflow_client.download_model_onnx(station_number, "production")
-    production_bk_scaler = mlflow_client.download_scaler(station_number, "bk_scaler", "production")
-    production_fo_scaler = mlflow_client.download_scaler(station_number, "fo_scaler", "production")
+    production_model = mlflow_client.download_latest_model_onnx(station_number, "production")
+    production_bk_scaler = mlflow_client.download_latest_scaler(station_number, "bk_scaler", "production")
+    production_fo_scaler = mlflow_client.download_latest_scaler(station_number, "fo_scaler", "production")
 
     if model is None or loaded_bk_scaler is None or loaded_fo_scaler is None:
       print("Error loading model or scalers")
@@ -45,7 +39,7 @@ def evaluate_model(data_path, station_number):
     model = onnxruntime.InferenceSession(model)
     production_model = onnxruntime.InferenceSession(production_model)
 
-    df = train_model.load_df(data_path)
+    df, _ = train_model.load_df(data_path)
     df_multi = df[['temperature', 'apparent_temperature', 'dew_point', 'precipitation_probability', 'surface_pressure', 'relative_humidity']]
     multi_array = df_multi.values
     print(f"Data length: {len(multi_array)}")
@@ -59,24 +53,23 @@ def evaluate_model(data_path, station_number):
     production_other_features_normalized = production_fo_scaler.transform(other_features)
 
     multi_array_scaled = np.column_stack([bike_stands_normalized, other_features_normalized])
+    production_multi_array_scaled = np.column_stack([production_bike_stands_normalized, production_other_features_normalized])
 
     window_size = 30
 
     X_final, y_final = train_model.create_dataset(multi_array_scaled, window_size)
-    production_X_final, production_y_final = train_model.create_dataset(multi_array_scaled, window_size)
+    production_X_final, production_y_final = train_model.create_dataset(production_multi_array_scaled, window_size)
 
     X_final = np.reshape(X_final, (X_final.shape[0], multi_array_scaled.shape[1], X_final.shape[1]))
-    production_X_final = np.reshape(production_X_final, (production_X_final.shape[0], multi_array_scaled.shape[1], production_X_final.shape[1]))
+    production_X_final = np.reshape(production_X_final, (production_X_final.shape[0], production_multi_array_scaled.shape[1], production_X_final.shape[1]))
 
-    y_pred = model.predict(X_final)
+    y_pred = model.run(["output"], {"input":X_final})[0]
     y_test = loaded_bk_scaler.inverse_transform(y_final.reshape(-1, 1)).flatten()
     y_pred = loaded_bk_scaler.inverse_transform(y_pred)
-    print(f"Predictions: {y_pred}")
 
-    production_y_pred = production_model.predict(production_X_final)
-    production_y_test = production_bike_stands_normalized.inverse_transform(production_y_final.reshape(-1, 1)).flatten()
-    production_y_pred = production_bike_stands_normalized.inverse_transform(production_y_pred)
-    print(f"Production predictions: {production_y_pred}")
+    production_y_pred = production_model.run(["output"], {"input":production_X_final})[0]
+    production_y_test = production_bk_scaler.inverse_transform(production_y_final.reshape(-1, 1)).flatten()
+    production_y_pred = production_bk_scaler.inverse_transform(production_y_pred)
 
     mae = mean_absolute_error(y_test, y_pred)
     mse = mean_squared_error(y_test, y_pred)
@@ -118,7 +111,7 @@ def main():
 
   for station_number in range(1, 2):
     data_path = os.path.join('data', 'processed', f"{station_number}_test.csv")  
-    evaluate_model(data_path, str(1))
+    evaluate_model(data_path, str(station_number))
 
 if __name__ == '__main__':
   main()
