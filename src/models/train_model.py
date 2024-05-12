@@ -4,8 +4,8 @@ import joblib
 import os
 import mlflow
 import tf2onnx
-import dagshub.auth
 import dagshub
+import dagshub.auth
 import tensorflow as tf
 import src.settings as settings
 
@@ -27,8 +27,6 @@ def mlflow_save_scaler(client, scaler_type, scaler, station_number):
   metadata = {
     "station_name": station_number,
     "scaler_type": scaler_type,
-    "expected_features": scaler.n_features_in_,
-    "feature_range": scaler.feature_range,
   }
 
   scaler = log_sklearn_model(
@@ -184,15 +182,15 @@ def load_df(path):
 
 def train(df, pipeline, reports_save_dir, station_number):
   client = MlflowClient()
+
   with mlflow.start_run(run_name=f"station_{station_number}", experiment_id="0", nested=True):
-    mlflow.tensorflow.autolog()
-
     # save pipeline
-    pipeline_ = log_sklearn_model(pipeline, artifact_path=f"models/{station_number}/pipeline", registered_model_name=f"pipeline_{station_number}")
-    mv = client.create_model_version(name=f"station_{station_number}", source=pipeline_.model_uri, run_id=pipeline_.run_id)
-    client.transition_model_version_stage(name=f"station_{station_number}", version=mv.version, stage="staging")
+    pipeline_ = log_sklearn_model(sk_model=pipeline, artifact_path=f"models/{station_number}/pipeline", registered_model_name=f"pipeline_{station_number}")
+    mv = client.create_model_version(name=f"pipeline_{station_number}", source=pipeline_.model_uri, run_id=pipeline_.run_id)
+    client.transition_model_version_stage(name=f"pipeline_{station_number}", version=mv.version, stage="staging")
 
-    train, test = split(df)
+    multi_array = create_multi_array(df)
+    train, test = split(multi_array)
     train_bike_stands_scaled, test_bike_stands_scaled = split_and_scale_bk(train, test)
     train_features_other_scaled, test_features_other_scaled = split_and_scale_fo(train, test)
     train_scaled, test_scaled = combine_features(train_bike_stands_scaled, test_bike_stands_scaled, train_features_other_scaled, test_features_other_scaled)
@@ -205,13 +203,13 @@ def train(df, pipeline, reports_save_dir, station_number):
     print('Training model...')
     model_history = model.fit(X_train, y_train, epochs=15, validation_split=0.2)
 
-    # save scalers
-    mlflow_save_scaler(client, "bk_scaler", bk_scaler, station_number)
-    mlflow_save_scaler(client, "fo_scaler", fo_scaler, station_number)
-    
     mlflow.log_param("epochs", 15)
     mlflow.log_param("batch_size", 32)
     mlflow.log_param("train_dataset_size", len(train))
+
+    # save scalers
+    mlflow_save_scaler(client, "bk_scaler", bk_scaler, station_number)
+    mlflow_save_scaler(client, "fo_scaler", fo_scaler, station_number)
 
     predictions = model.predict(X_test)
     predictions_inv = bk_scaler.inverse_transform(predictions)
@@ -228,12 +226,9 @@ def train(df, pipeline, reports_save_dir, station_number):
       tf.TensorSpec(shape=(None, X_train.shape[1], X_train.shape[2]), dtype=tf.double, name="input")
     ]
     onnx_model, _ = tf2onnx.convert.from_keras(model=model, input_signature=input_signature, opset=13)
-
-    model_ = log_onnx_model(onnx_model=onnx_model, artifact_path=f"models/{station_number}", signature=infer_signature(X_test, predictions), registered_model_name=f"station_{station_number}")
-
-    mv = client.create_model_version(name=f"station_{station_number}", source=model_.model_uri, run_id=model_.run_id)
-
-    client.transition_model_version_stage(name=f"station_{station_number}", version=mv.version, stage="staging")
+    model_ = log_onnx_model(onnx_model=onnx_model, artifact_path=f"models/{station_number}/model", signature=infer_signature(X_test, predictions), registered_model_name=f"model_{station_number}")
+    mv = client.create_model_version(name=f"model_{station_number}", source=model_.model_uri, run_id=model_.run_id)
+    client.transition_model_version_stage(name=f"model_{station_number}", version=mv.version, stage="staging")
 
     mlflow.end_run()
 
@@ -246,7 +241,7 @@ def main():
 
   path = "./data/processed/"
 
-  for station_number in range(1, 30):
+  for station_number in range(1, 2):
     data, pipeline = load_df(os.path.join(path, f"{station_number}_train.csv"))
 
     model_save_dir = f'./models/{station_number}/'
@@ -257,9 +252,9 @@ def main():
 
     model_t, bk_scaler_t, fo_scaler_t = train(data, pipeline, reports_save_dir, station_number)
 
-    model_t.save(f'{model_save_dir}/multi_gru_model.h5')
-    joblib.dump(bk_scaler_t, f'{model_save_dir}/multi_gru_bk_scaler.pkl')
-    joblib.dump(fo_scaler_t, f'{model_save_dir}/multi_gru_fo_scaler.pkl')
+    # model_t.save(f'{model_save_dir}/multi_gru_model.h5')
+    # joblib.dump(bk_scaler_t, f'{model_save_dir}/multi_gru_bk_scaler.pkl')
+    # joblib.dump(fo_scaler_t, f'{model_save_dir}/multi_gru_fo_scaler.pkl')
 
 if __name__ == "__main__":
   main()

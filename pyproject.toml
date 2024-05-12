@@ -23,9 +23,10 @@ evidently = "^0.4.19"
 mlflow = "^2.12.1"
 python-dotenv = "^1.0.1"
 dagshub = "^0.3.25"
-tf2onnx = "^1.16.1"
-tensorflow-io-gcs-filesystem = "0.31.0"
-tensorflow = "2.15.0"
+tensorflow-io-gcs-filesystem = "0.27.0"
+tensorflow = "~2.10"
+onnxruntime = "^1.17.3"
+tf2onnx = "1.14.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
