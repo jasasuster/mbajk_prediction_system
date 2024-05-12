@@ -2,7 +2,7 @@ name: Train Model
 
 on:
   workflow_run:
-    workflows: ['Fetch and Process Data']
+    workflows: ['Full Data Workflow']
     types:
       - completed
   workflow_dispatch:
