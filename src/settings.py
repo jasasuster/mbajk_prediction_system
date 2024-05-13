@@ -1,3 +1,8 @@
-MLFLOW_TRACKING_URI="https://dagshub.com/jasasuster/mbajk_prediction_system.mlflow"
-MLFLOW_TRACKING_USERNAME="jasasuster"
-MLFLOW_TRACKING_PASSWORD="71e6254039b25d3c0bf5a94972306bb3a68badf3"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
+MLFLOW_TRACKING_USERNAME = os.getenv("MLFLOW_TRACKING_USERNAME")
+MLFLOW_TRACKING_PASSWORD = os.getenv("MLFLOW_TRACKING_PASSWORD")
