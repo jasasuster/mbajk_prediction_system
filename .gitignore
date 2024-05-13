@@ -10,5 +10,6 @@ src/client/.vscode
 src/client/node_modules/.package-lock.json
 /data
 /data-file.bin
+.env
 
 /models
