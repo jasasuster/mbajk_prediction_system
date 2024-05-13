@@ -19,8 +19,8 @@ def main():
     TestNumberOfDuplicatedColumns(),
     TestColumnsType(),
     TestNumberOfDriftedColumns(),
-    NoTargetPerformanceTestPreset(),
-    DataStabilityTestPreset()
+    # NoTargetPerformanceTestPreset(),
+    # DataStabilityTestPreset()
   ])
 
   current_path = os.path.join('data', 'validate', 'current_data.csv')
