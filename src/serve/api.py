@@ -1,8 +1,10 @@
 from flask import Flask, request
 from flask_cors import CORS
+from datetime import datetime
 
 from src.models.predict_model import predict
 from src.models.mlflow_client import download_all_models
+from src.db.config import insert_prediction
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +17,7 @@ def create_app():
             station_number = data['station_number']
             print(station_number)
             predictions = predict(station_number)
+            insert_prediction(f"station_{station_number}", {'predictions': predictions, 'date': datetime.now()})
 
             return {'predictions': predictions}, 200
         except Exception as e:
