@@ -53,6 +53,7 @@ def main():
   mlflow.set_tracking_uri(settings.MLFLOW_TRACKING_URI)
 
   for station_number in range(1, 30):
+    print(f"---------- Testing station {station_number} ----------")
     station_data = pd.read_csv(f"./data/processed/{station_number}.csv")
     station_data['date'] = pd.to_datetime(station_data['last_update'], unit='ms')
     station_data.sort_values(by='date', inplace=True)

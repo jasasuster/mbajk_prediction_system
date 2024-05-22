@@ -1,15 +1,14 @@
-import os
+import src.settings as settings
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.errors import DuplicateKeyError
 
 from datetime import datetime, date
-from dotenv import load_dotenv
 
-load_dotenv()
+url = f"mongodb+srv://{settings.MONGO_USERNAME}:{settings.MONGO_PASSWORD}@{settings.MONGO_HOST}/?retryWrites=true&w=majority&appName=Cluster0"
 
-url = f"mongodb+srv://{os.getenv('MONGO_USERNAME')}:{os.getenv('MONGO_PASSWORD')}@{os.getenv('MONGO_HOST')}/?retryWrites=true&w=majority&appName=Cluster0"
+print("URL: ", url)
 
 def insert_prediction(collection_name, data):
   try:
