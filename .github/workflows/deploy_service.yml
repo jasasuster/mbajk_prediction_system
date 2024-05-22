@@ -39,13 +39,13 @@ jobs:
 
       - name: Setup Dagshub
         run: |
-          dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
-          dvc remote modify origin --local access_key_id ${{ secrets.ACCESS_KEY_ID }}
-          dvc remote modify origin --local secret_access_key ${{ secrets.SECRET_ACCESS_KEY }}
+          poetry run dvc remote modify origin endpointurl https://dagshub.com/jasasuster/mbajk_prediction_system.s3
+          poetry run dvc remote modify origin --local access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          poetry run dvc remote modify origin --local secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Pull data
         run: |
-          dvc pull -r origin
+          poetry run dvc pull -r origin
 
       # Step 2 - Authenticate us with the container registry we intend to push a image to.
       - name: Log in to the Container registry
