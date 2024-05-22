@@ -4,7 +4,7 @@ from datetime import datetime
 
 from src.models.predict_model import predict
 from src.models.mlflow_client import download_all_models
-from src.db.config import insert_prediction
+from src.db.db import insert_prediction
 
 def create_app():
     app = Flask(__name__)
