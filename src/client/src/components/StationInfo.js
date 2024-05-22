@@ -34,7 +34,7 @@ function StationInfo() {
         setIsLoadingPredictions(false);
       } else {
         setIsLoadingPredictions(true);
-        fetch(`http://localhost:3000/mbajk/predict`, {
+        fetch(`http://127.0.0.1:3000/mbajk/predict`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -74,9 +74,9 @@ function StationInfo() {
   function format(inputDate) {
     let hours = inputDate.getHours();
     let minutes = inputDate.getMinutes();
-    const formattedHours = hours === 0 ? 12 : hours < 10 ? "0" + hours : hours;
-    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-    return formattedHours + ":" + formattedMinutes;
+    const formattedHours = hours === 0 ? 12 : hours < 10 ? '0' + hours : hours;
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    return formattedHours + ':' + formattedMinutes;
   }
 
   const times = generateTimesArray(60);
@@ -101,7 +101,7 @@ function StationInfo() {
       const now = new Date().getTime();
       // Check if the stored data is less than 1 hour old
       if (now - stationData.timestamp < 60 * 60 * 1000) {
-        return stationData.predictions; 
+        return stationData.predictions;
       }
     }
     return null;
