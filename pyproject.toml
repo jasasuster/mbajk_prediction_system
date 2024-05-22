@@ -27,6 +27,7 @@ tensorflow-io-gcs-filesystem = "0.27.0"
 tensorflow = "~2.10"
 onnxruntime = "^1.17.3"
 tf2onnx = "1.14.0"
+pymongo = "^4.7.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
