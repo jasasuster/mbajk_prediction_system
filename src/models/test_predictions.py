@@ -54,9 +54,9 @@ def main():
 
   for station_number in range(1, 30):
     station_data = pd.read_csv(f"./data/processed/{station_number}.csv")
-    station_data['date'] = pd.to_datetime(station_data['date'])
+    station_data['date'] = pd.to_datetime(station_data['last_update'], unit='ms')
     station_data.sort_values(by='date', inplace=True)
-    station_data.drop_duplicates('date', inplace=True)
+    station_data.drop(columns=['last_update'], inplace=True)
     station_data.reset_index(inplace=True)
     station_data.set_index('date')
 
