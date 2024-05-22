@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  evaluate predictions:
+  evaluate_predictions:
     defaults:
       run:
         shell: bash
