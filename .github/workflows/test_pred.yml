@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  train_model:
+  evaluate predictions:
     defaults:
       run:
         shell: bash
