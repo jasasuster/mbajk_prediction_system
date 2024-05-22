@@ -34,7 +34,7 @@ function StationInfo() {
         setIsLoadingPredictions(false);
       } else {
         setIsLoadingPredictions(true);
-        fetch(`http://127.0.0.1:3000/mbajk/predict`, {
+        fetch(`http://${process.env.REACT_APP_SERVE_URL}:3000/mbajk/predict`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
