@@ -11,8 +11,10 @@ import src.settings as settings
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
+from tensorflow.keras import Input
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import GRU, Dense
+from tensorflow.keras.layers import GRU, Dense, Dropout
+from tensorflow_model_optimization.quantization.keras import quantize_annotate_layer, quantize_apply
 from mlflow import MlflowClient
 from mlflow.onnx import log_model as log_onnx_model
 from mlflow.sklearn import log_model as log_sklearn_model
@@ -133,11 +135,23 @@ def reshape_for_model(train_scaled, test_scaled):
 
 def build_gru_model(input_shape):
   model = Sequential()
-  model.add(GRU(32, activation='relu', input_shape=input_shape, return_sequences=True))
+
+  model.add(Input(shape=input_shape))
+  model.add(GRU(128, return_sequences=True))
+  model.add(Dropout(0.2))
+
+  model.add(GRU(64, return_sequences=True))
+  model.add(Dropout(0.2))
+
   model.add(GRU(32, activation='relu'))
-  model.add(Dense(16, activation='relu'))
-  model.add(Dense(1))
+
+  model.add(quantize_annotate_layer(Dense(32, activation='relu')))
+  model.add(quantize_annotate_layer(Dense(1)))
+
+  model = quantize_apply(model)
+
   model.compile(optimizer='adam', loss='mse')
+
   return model
 
 def calculate_and_save_metrics(y_test, gru_predictions_inv, model_history, reports_save_dir):
