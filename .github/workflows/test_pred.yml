@@ -3,7 +3,7 @@ name: Evaluate predictions
 on:
   workflow_dispatch:
   schedule:
-    - cron: '50 21 * * *'
+    - cron: '45 21 * * *'
 
 env:
   MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}

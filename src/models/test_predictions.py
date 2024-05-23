@@ -9,7 +9,7 @@ import src.db.db as db
 import src.settings as settings
 
 def test_predictions(station_number, station_data):
-  station_predictions = db.predictions_today(station_number)
+  station_predictions = db.predictions_today(f"station_{station_number}")
 
   if not station_predictions:
     print(f"No predictions for today for station {station_number}")
@@ -26,7 +26,7 @@ def test_predictions(station_number, station_data):
     station_data = station_data.set_index('date')
     for i, pred in enumerate(predictions_hourly):
       target_time = date + timedelta(hours=i)
-      nearest_timestamp_index = station_data.index.get_indexer([target_time], method='nearest')
+      nearest_timestamp_index = station_data.index.get_indexer([target_time], method='nearest')[0]
       nearest_timestamp_bike_data = station_data.iloc[nearest_timestamp_index].to_dict()
       mapped_predictions.append({
         'date': target_time,
@@ -58,10 +58,11 @@ def main():
     station_data['date'] = pd.to_datetime(station_data['last_update'], unit='ms')
     station_data.sort_values(by='date', inplace=True)
     station_data.drop(columns=['last_update'], inplace=True)
+    station_data.drop_duplicates(subset='date', inplace=True)
     station_data.reset_index(inplace=True)
     station_data.set_index('date')
 
-    test_predictions(f"station_{station_number}", station_data)
+    test_predictions(station_number, station_data)
 
 if __name__ == '__main__':
   main()

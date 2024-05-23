@@ -8,8 +8,6 @@ from datetime import datetime, date
 
 url = f"mongodb+srv://{settings.MONGO_USERNAME}:{settings.MONGO_PASSWORD}@{settings.MONGO_HOST}/?retryWrites=true&w=majority&appName=Cluster0"
 
-print("URL: ", url)
-
 def insert_prediction(collection_name, data):
   try:
     client = MongoClient(url, server_api=ServerApi('1'))
@@ -22,9 +20,9 @@ def insert_prediction(collection_name, data):
   except Exception as e:
     print(f"Error: {e}")
 
-def get_predictions_by_date(collection_name, start_date, end_date):
+def get_predictions_by_date(collection, start_date, end_date):
   try:
-    predictions = collection_name.find({
+    predictions = collection.find({
       "date": {
         "$gte": datetime.combine(start_date, datetime.min.time()),
         "$lte": datetime.combine(end_date, datetime.max.time())
@@ -39,11 +37,12 @@ def predictions_today(station_name):
   try:
     client = MongoClient(url, server_api=ServerApi('1'))
     if client:
-      collection = client.get_database('stations').get_collection(station_name)
+      collection = client.get_database('station_predictions').get_collection(station_name)
       today = date.today()
       start_date = datetime.combine(today, datetime.min.time())
       end_date = datetime.combine(today, datetime.max.time())
-      return get_predictions_by_date(collection, start_date, end_date)
+      predictions = get_predictions_by_date(collection, start_date, end_date)
+      return predictions
     
   except Exception as e:
     print(f"Error: {e}")
